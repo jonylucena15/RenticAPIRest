@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Rentic_javaee:war ">
-    <output-path>$PROJECT_DIR$/out/artifacts/Rentic_javaee_war_</output-path>
-    <root id="archive" name="Rentic_javaee_war .war">
-      <element id="artifact" artifact-name="Rentic_javaee:war Exploded" />
-    </root>
-  </artifact>
-</component>
