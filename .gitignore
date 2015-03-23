@@ -1,0 +1,6 @@
+*.iml
+target
+.idea
+*.class
+/nb-configuration.xml
+faces-config.NavData

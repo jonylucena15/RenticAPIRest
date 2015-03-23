@@ -1,0 +1,88 @@
+package org.udg.pds.simpleapp_javaee.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.udg.pds.simpleapp_javaee.util.LongAdapter;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email", "username"}))
+public class User implements Serializable {
+    /**
+     * Default value included to remove warning. Remove or modify at will. *
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
+    @NotNull
+    private String username;
+
+    @NotNull
+    private String email;
+
+    @NotNull
+    @JsonIgnore
+    private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Collection<Task> tasks;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Collection<Task> getTasks() {
+        tasks.size();
+        return tasks;
+    }
+
+    public void setTasks(List<Task> ts) {
+        this.tasks = ts;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
+}
