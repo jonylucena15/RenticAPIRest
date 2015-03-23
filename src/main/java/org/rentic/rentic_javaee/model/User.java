@@ -1,7 +1,6 @@
-package org.udg.pds.simpleapp_javaee.model;
+package org.rentic.rentic_javaee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.udg.pds.simpleapp_javaee.util.LongAdapter;
 
 import javax.persistence.*;
 import java.io.Serializable;

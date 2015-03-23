@@ -1,12 +1,7 @@
-package org.udg.pds.simpleapp_javaee.model;
-
-import org.udg.pds.simpleapp_javaee.util.LongAdapter;
+package org.rentic.rentic_javaee.model;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

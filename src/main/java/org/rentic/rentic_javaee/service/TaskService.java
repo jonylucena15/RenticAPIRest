@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.service;
+package org.rentic.rentic_javaee.service;
 
 import java.util.Collection;
 import java.util.Date;
@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.udg.pds.simpleapp_javaee.model.Event;
-import org.udg.pds.simpleapp_javaee.model.Task;
-import org.udg.pds.simpleapp_javaee.model.User;
+import org.rentic.rentic_javaee.model.Event;
+import org.rentic.rentic_javaee.model.Task;
+import org.rentic.rentic_javaee.model.User;
 
 @Stateless
 @LocalBean

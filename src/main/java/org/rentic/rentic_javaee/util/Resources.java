@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.util;
+package org.rentic.rentic_javaee.util;
 
 import java.util.logging.Logger;
 

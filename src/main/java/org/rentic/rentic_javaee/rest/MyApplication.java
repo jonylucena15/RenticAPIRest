@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.rest;
+package org.rentic.rentic_javaee.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

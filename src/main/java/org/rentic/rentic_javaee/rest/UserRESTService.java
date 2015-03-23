@@ -1,8 +1,10 @@
-package org.udg.pds.simpleapp_javaee.rest;
+package org.rentic.rentic_javaee.rest;
 
 import java.io.IOException;
-import org.udg.pds.simpleapp_javaee.model.User;
-import org.udg.pds.simpleapp_javaee.service.UserService;
+
+import org.rentic.rentic_javaee.model.User;
+import org.rentic.rentic_javaee.service.UserService;
+import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -20,10 +22,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.udg.pds.simpleapp_javaee.util.InitDB;
-import org.udg.pds.simpleapp_javaee.util.ToJSON;
 
 // This class is used to process all the authentication related URLs
 @Path("/users")

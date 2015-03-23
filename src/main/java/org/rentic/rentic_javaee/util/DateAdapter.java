@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.util;
+package org.rentic.rentic_javaee.util;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.text.SimpleDateFormat;

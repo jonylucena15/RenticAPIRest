@@ -1,5 +1,6 @@
-package org.udg.pds.simpleapp_javaee.rest;
+package org.rentic.rentic_javaee.rest;
 
+import java.lang.*;
 import java.util.Date;
 
 import javax.ejb.EJB;
@@ -13,10 +14,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.udg.pds.simpleapp_javaee.model.Event;
-import org.udg.pds.simpleapp_javaee.model.Task;
-import org.udg.pds.simpleapp_javaee.service.TaskService;
-import org.udg.pds.simpleapp_javaee.util.ToJSON;
+import org.rentic.rentic_javaee.model.Event;
+import org.rentic.rentic_javaee.model.Task;
+import org.rentic.rentic_javaee.service.TaskService;
+import org.rentic.rentic_javaee.util.ToJSON;
 
 @Path("/tasks")
 @RequestScoped

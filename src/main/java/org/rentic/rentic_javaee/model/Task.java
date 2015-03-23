@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.model;
+package org.rentic.rentic_javaee.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,8 +6,6 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.udg.pds.simpleapp_javaee.util.DateAdapter;
-import org.udg.pds.simpleapp_javaee.util.LongAdapter;
 
 @Entity
 // This tells JAXB that it has to ignore getters and setters and only use fields for XML marshaling/unmarshaling

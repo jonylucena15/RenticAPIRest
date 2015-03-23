@@ -3,23 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.udg.pds.simpleapp_javaee.util;
+package org.rentic.rentic_javaee.util;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.management.relation.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
-import org.udg.pds.simpleapp_javaee.model.User;
+import org.rentic.rentic_javaee.model.User;
 
 @Singleton
 @Startup

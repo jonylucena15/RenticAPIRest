@@ -1,4 +1,4 @@
-package org.udg.pds.simpleapp_javaee.rest;
+package org.rentic.rentic_javaee.rest;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;

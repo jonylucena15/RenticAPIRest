@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.udg.pds.simpleapp_javaee.util;
+package org.rentic.rentic_javaee.util;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -16,8 +16,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.udg.pds.simpleapp_javaee.model.Task;
-import org.udg.pds.simpleapp_javaee.model.User;
+import org.rentic.rentic_javaee.model.User;
+import org.rentic.rentic_javaee.model.Task;
 
 /**
  *
@@ -29,7 +29,7 @@ public class ToJSON {
     @PostConstruct
     void init() {
         try {
-            User = JAXBContext.newInstance(User.class).createMarshaller();
+            User = JAXBContext.newInstance(org.rentic.rentic_javaee.model.User.class).createMarshaller();
             //User.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
         } catch (JAXBException ex) {
             Logger.getLogger(ToJSON.class.getName()).log(Level.SEVERE, "Cannot initialize User marshaller!", ex);

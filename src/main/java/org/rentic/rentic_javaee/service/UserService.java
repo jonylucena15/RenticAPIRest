@@ -1,6 +1,6 @@
-package org.udg.pds.simpleapp_javaee.service;
+package org.rentic.rentic_javaee.service;
 
-import org.udg.pds.simpleapp_javaee.model.User;
+import org.rentic.rentic_javaee.model.User;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
