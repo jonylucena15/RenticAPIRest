@@ -36,6 +36,7 @@ public class InitDB {
                 User u = new User();
                 u.setUsername("yo");
                 u.setPassword("malament");
+                u.setNomComplet("provaa sadsa");
                 u.setEmail("yo@hotmail.com");
                 em.persist(u);
                 em.flush();

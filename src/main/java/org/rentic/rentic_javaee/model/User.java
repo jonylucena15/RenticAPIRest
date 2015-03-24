@@ -28,8 +28,16 @@ public class User implements Serializable {
     @NotNull
     private String username;
 
+    private String nomComplet;
+
     @NotNull
     private String email;
+
+    private String telefon;
+
+    private String facebookId;
+
+    private String fotoPerfil;
 
     @NotNull
     @JsonIgnore
@@ -70,6 +78,22 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getNomComplet() { return nomComplet;  }
+
+    public void setNomComplet(String nomComplet) { this.nomComplet = nomComplet; }
+
+    public String getTelefon() {  return telefon;    }
+
+    public void setTelefon(String telefon) { this.telefon = telefon; }
+
+    public String getFacebookId() { return facebookId; }
+
+    public void setFacebookId(String facebookId) { this.facebookId = facebookId; }
+
+    public String getFotoPerfil() { return fotoPerfil; }
+
+    public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
 
     public Collection<Task> getTasks() {
         tasks.size();

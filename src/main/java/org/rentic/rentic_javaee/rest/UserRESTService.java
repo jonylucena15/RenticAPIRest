@@ -8,6 +8,7 @@ import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.swing.*;
 import javax.ws.rs.Path;
 import javax.ws.rs.POST;
 import javax.ws.rs.FormParam;
@@ -51,15 +52,15 @@ public class UserRESTService {
             return Error.build("Sessions not supported!");
         }
 
-        // Check if the session has the attribute "simpleapp_auth_id"
-        if (session.getAttribute("simpleapp_auth_id") == null) {
+        // Check if the session has the attribute "rentic_auth_id"
+        if (session.getAttribute("rentic_auth_id") == null) {
             // If the user is not authenticated we have to check if the password match
             User u = userService.matchPassword(username, password);
             if (u != null) {
                 try {
-                    // The username and password match, add the "simpleapp_auth_id" attribute to the session
+                    // The username and password match, add the "rentic_auth_id" attribute to the session
                     // to identify the user in the next calls
-                    session.setAttribute("simpleapp_auth_id", u.getId());
+                    session.setAttribute("rentic_auth_id", u.getId());
                     return toJSON.User(u);
                 } catch (Exception ex) {
                     return Error.build(ex.getMessage());
@@ -78,7 +79,11 @@ public class UserRESTService {
     public String register(
             @Context HttpServletRequest req,
             @FormParam("username") String username,
+            @FormParam("nomComplet") String nomComplet,
             @FormParam("email") String email,
+            @FormParam("telefon") String telefon,
+            @FormParam("facebookId") String facebookId,
+            @FormParam("fotoPerfil") String fotoPerfil,
             @FormParam("password") String password) {
 
         HttpSession session = req.getSession();
@@ -87,11 +92,11 @@ public class UserRESTService {
             return Error.build("Sessions not supported!");
         }
 
-        if (session.getAttribute("simpleapp_auth_id") != null) {
+        if (session.getAttribute("rentic_auth_id") != null) {
             return Error.build("You are already authenticated!");
         }
 
-        User u = userService.register(username, email, password);
+        User u = userService.register(username,nomComplet, email, telefon, facebookId, fotoPerfil, password);
         if (u != null) {
             try {
                 StringWriter sw = new StringWriter();
@@ -101,7 +106,6 @@ public class UserRESTService {
                 return Error.build(ex.getMessage());
             }
         }
-
         return Error.build("Your email is already registered!");
 
     }
@@ -120,7 +124,7 @@ public class UserRESTService {
             return Error.build("Sessions not supported!");
         }
 
-        Long userid = (Long) session.getAttribute("simpleapp_auth_id");
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
 
         // Check if the user is authenticated
         if (userid == null) {

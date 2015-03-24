@@ -26,7 +26,7 @@ public class UserService {
         }
     }
 
-    public User register(String username, String email, String password) {
+    public User register(String username, String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password) {
 
         Query q = em.createQuery("select u from User u where u.email=:email");
         q.setParameter("email", email);
@@ -45,6 +45,10 @@ public class UserService {
         User nu = new User();
         nu.setUsername(username);
         nu.setEmail(email);
+        nu.setFacebookId(facebookId);
+        nu.setFotoPerfil(fotoPerfil);
+        nu.setNomComplet(nomComplet);
+        nu.setTelefon(telefon);
         nu.setPassword(password);
         em.persist(nu);
         return nu;
