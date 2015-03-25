@@ -40,7 +40,7 @@ public class TaskRESTService {
             return Error.build("Sessions not supported!");
         }
 
-        Long userId = (Long) session.getAttribute("simpleapp_auth_id");
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
 
         if (userId == null) {
             return Error.build("User not authenticated!");
@@ -67,7 +67,7 @@ public class TaskRESTService {
         if (session == null) {
             return Error.build("Sessions not supported!");
         }
-        Long userId = (Long) session.getAttribute("simpleapp_auth_id");
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
         if (userId == null) {
             return Error.build("User not authenticated!");
         }
@@ -98,7 +98,7 @@ public class TaskRESTService {
             return Error.build("Sessions not supported!");
         }
         
-        Long userId = (Long) session.getAttribute("simpleapp_auth_id");
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
         
         if (userId == null) {
             return Error.build("User not authenticated!");
