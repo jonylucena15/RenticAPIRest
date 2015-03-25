@@ -50,7 +50,8 @@ public class UserService {
         nu.setNomComplet(nomComplet);
         nu.setTelefon(telefon);
         nu.setPassword(password);
-        em.persist(nu);
+
+        q = em.createQuery("select u from User u where u.username=:username");
         return nu;
     }
 

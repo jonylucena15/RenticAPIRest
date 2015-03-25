@@ -37,6 +37,12 @@ public class UserRESTService {
     @Inject
     ToJSON toJSON;
 
+
+
+    public String Answer(String code, String errormsg, String data){
+            return "{\"code\":"+code+", \"message\":\""+errormsg+"\", \"data\":"+data+"}" ;
+    }
+
     @POST
     @Path("auth")
     @Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +55,7 @@ public class UserRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
 
         // Check if the session has the attribute "rentic_auth_id"
@@ -61,15 +67,17 @@ public class UserRESTService {
                     // The username and password match, add the "rentic_auth_id" attribute to the session
                     // to identify the user in the next calls
                     session.setAttribute("rentic_auth_id", u.getId());
-                    return toJSON.User(u);
+
+                    return Answer("200", "tot correcte", toJSON.User(u));
+
                 } catch (Exception ex) {
-                    return Error.build(ex.getMessage());
+                    return Error.build("300", ex.getMessage());
                 }
             } else {
-                return Error.build("Authentication error!");
+                return Error.build("300", "User or password incorrect!");
             }
         } else {
-            return Error.build("Already authenticated!");
+            return Error.build("301", "Already authenticated!");
         }
     }
 
@@ -89,11 +97,11 @@ public class UserRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
 
         if (session.getAttribute("rentic_auth_id") != null) {
-            return Error.build("You are already authenticated!");
+            return Error.build("300","You are already authenticated!");
         }
 
         User u = userService.register(username,nomComplet, email, telefon, facebookId, fotoPerfil, password);
@@ -103,10 +111,10 @@ public class UserRESTService {
                 JAXBContext.newInstance(User.class).createMarshaller().marshal(u, sw);
                 return sw.toString();
             } catch (Exception ex) {
-                return Error.build(ex.getMessage());
+                return Error.build("300",ex.getMessage());
             }
         }
-        return Error.build("Your email is already registered!");
+        return Error.build("300","Your email is already registered!");
 
     }
 
@@ -121,32 +129,32 @@ public class UserRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
 
         Long userid = (Long) session.getAttribute("rentic_auth_id");
 
         // Check if the user is authenticated
         if (userid == null) {
-            return Error.build("You are not authenticated!");
+            return Error.build("300","You are not authenticated!");
         }
 
         User u = userService.getUser(id);
 
         // Check if the user id exists
         if (u == null) {
-            return Error.build("User id == " + id + " does not exist!");
+            return Error.build("300","User id == " + id + " does not exist!");
         }
 
         // Check if the user is trying to access other user's data
         if (u.getId() != userid) {
-            return Error.build("You cannot access data fromm other users!");
+            return Error.build("300","You cannot access data fromm other users!");
         }
         try {
             return toJSON.User(u);
         } catch (IOException ex) {
             Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
-            return Error.build("Error cocerting User to JSON!");
+            return Error.build("300","Error cocerting User to JSON!");
         }
     }
 

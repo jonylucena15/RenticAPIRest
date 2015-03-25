@@ -38,16 +38,14 @@ public class ToJSON {
         }
     }
 
-    public String preJSON(String code, String errormsg, String data){
-        return "{Code:"+code+" - Missatge:"+errormsg+" - Dataa:"+data+"}" ;
-    }
+
 
     public String User(User u) throws IOException {
         StringWriter sw = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(sw,u);
 
-        return preJSON("200","tot correcte", sw.toString());
+        return sw.toString();
 
     }
 

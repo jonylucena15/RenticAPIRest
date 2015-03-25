@@ -8,7 +8,7 @@ package org.rentic.rentic_javaee.rest;
  * To change this template use File | Settings | File Templates.
  */
 public class Error {
-    public static String build(String msg) {
-        return "{\"msg\":\"" + msg + "\"}";
+    public static String build(String code, String msg) {
+        return "{\"code\":"+code+",\"message\":\""+msg+"\",\"data\":{}}" ;
     }
 }

@@ -37,25 +37,25 @@ public class TaskRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
 
         if (userId == null) {
-            return Error.build("User not authenticated!");
+            return Error.build("300","User not authenticated!");
         }
 
         try {
             Task t = taskService.getTask(id);
             // Check that the user authenticated in the session owns the task it is trying to access
             if (t.getUser().getId() != userId) {
-                return Error.build("You don't own this task!");
+                return Error.build("300","You don't own this task!");
             }
             //return toJSON.Task(t);
             return toJSON.Object(t);
         } catch (Exception ex) {
-            return Error.build(ex.getMessage());
+            return Error.build("300",ex.getMessage());
         }
     }
 
@@ -65,11 +65,11 @@ public class TaskRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
         Long userId = (Long) session.getAttribute("rentic_auth_id");
         if (userId == null) {
-            return Error.build("User not authenticated!");
+            return Error.build("300","User not authenticated!");
         }
 
         try {
@@ -79,9 +79,9 @@ public class TaskRESTService {
             final TaskService.TaskList results = taskService.getTasks(userId);
             return toJSON.Object(results);
         } catch (EJBException ex) {
-            return Error.build("Exception at taskService: " + ex.getMessage());
+            return Error.build("300","Exception at taskService: " + ex.getMessage());
         } catch (Exception ex) {
-            return Error.build(ex.getMessage());
+            return Error.build("300",ex.getMessage());
         }
     }
 
@@ -95,30 +95,30 @@ public class TaskRESTService {
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("Sessions not supported!");
+            return Error.build("300","Sessions not supported!");
         }
         
         Long userId = (Long) session.getAttribute("rentic_auth_id");
         
         if (userId == null) {
-            return Error.build("User not authenticated!");
+            return Error.build("300","User not authenticated!");
         }
 
         if (text == null) {
-            return Error.build("No text supplied");
+            return Error.build("300","No text supplied");
         }
         if (dateCreated == null) {
-            return Error.build("No creation date supplied");
+            return Error.build("300","No creation date supplied");
         }
         if (dateLimit == null) {
-            return Error.build("No limit date supplied");
+            return Error.build("300","No limit date supplied");
         }
 
         try {
             Task t = taskService.addTask(text, userId, dateCreated, dateLimit);
             return toJSON.Object(t);
         } catch (Exception ex) {
-            return Error.build(ex.getMessage());
+            return Error.build("300",ex.getMessage());
         }
     }
 }
