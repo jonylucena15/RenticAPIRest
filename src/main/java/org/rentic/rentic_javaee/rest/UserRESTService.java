@@ -132,6 +132,7 @@ public class UserRESTService {
         User u = new User(username, nomComplet, email, telefon, facebookId, fotoPerfil,  password);
 
         int  n = userService.register(u);
+
         if (n == 0) {
             try {
                 session.setAttribute("rentic_auth_id", u.getId());
