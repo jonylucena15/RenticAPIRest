@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 @Stateless
 @LocalBean
@@ -26,33 +27,24 @@ public class UserService {
         }
     }
 
-    public User register(String username, String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password) {
-
+    public int register(User nu) {
         Query q = em.createQuery("select u from User u where u.email=:email");
-        q.setParameter("email", email);
-        User u = (User) q.getSingleResult();
-        if (u != null) {
-            return null;
-        }
+        q.setParameter("email", nu.getEmail());
 
-        q = em.createQuery("select u from User u where u.username=:username");
-        q.setParameter("username", username);
-        u = (User) q.getSingleResult();
-        if (u != null) {
-            return null;
-        }
+        List results = q.getResultList();
+        if (results.isEmpty()) {
+            q = em.createQuery("select u from User u where u.username=:username");
+            q.setParameter("username", nu.getUsername());
+            results = q.getResultList();
 
-        User nu = new User();
-        nu.setUsername(username);
-        nu.setEmail(email);
-        nu.setFacebookId(facebookId);
-        nu.setFotoPerfil(fotoPerfil);
-        nu.setNomComplet(nomComplet);
-        nu.setTelefon(telefon);
-        nu.setPassword(password);
+            if (results.isEmpty()) {
+                em.persist(nu);
+                return 0;
+            }else
+                return 1;
+        }else
+            return 2;
 
-        q = em.createQuery("select u from User u where u.username=:username");
-        return nu;
     }
 
     public User getUser(long id) {

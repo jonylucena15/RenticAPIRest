@@ -47,6 +47,26 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Task> tasks;
 
+    public User(){
+        this.username="";
+        this.nomComplet="";
+        this.email="";
+        this.telefon="";
+        this.facebookId="";
+        this.fotoPerfil="";
+        this.password="";
+    }
+
+    public User(String username,String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password ){
+        this.username=username;
+        this.nomComplet=nomComplet;
+        this.email=email;
+        this.telefon=telefon;
+        this.facebookId=facebookId;
+        this.fotoPerfil=fotoPerfil;
+        this.password=password;
+    }
+
     public Long getId() {
         return id;
     }

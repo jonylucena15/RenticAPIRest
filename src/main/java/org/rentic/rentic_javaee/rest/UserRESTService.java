@@ -68,7 +68,7 @@ public class UserRESTService {
                     // to identify the user in the next calls
                     session.setAttribute("rentic_auth_id", u.getId());
 
-                    return Answer("200", "tot correcte", toJSON.User(u));
+                    return Answer("200", "authenticated correctly", toJSON.User(u));
 
                 } catch (Exception ex) {
                     return Error.build("300", ex.getMessage());
@@ -79,6 +79,31 @@ public class UserRESTService {
         } else {
             return Error.build("301", "Already authenticated!");
         }
+    }
+
+    @Path("logout")
+    @POST
+    @Produces("text/xml")
+    public String logout(
+            @Context HttpServletRequest req) {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            return Error.build("300","Sessions not supported!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") != null) {
+            try {
+
+                session.setAttribute("rentic_auth_id",null);
+
+                return Answer("200", "logout correctly", "");
+            } catch (Exception ex) {
+                return Error.build("300",ex.getMessage());
+            }
+        }else
+            return Error.build("300","You aren't already authenticated!");
     }
 
     @Path("register")
@@ -104,17 +129,22 @@ public class UserRESTService {
             return Error.build("300","You are already authenticated!");
         }
 
-        User u = userService.register(username,nomComplet, email, telefon, facebookId, fotoPerfil, password);
-        if (u != null) {
+        User u = new User(username, nomComplet, email, telefon, facebookId, fotoPerfil,  password);
+
+        int  n = userService.register(u);
+        if (n == 0) {
             try {
-                StringWriter sw = new StringWriter();
-                JAXBContext.newInstance(User.class).createMarshaller().marshal(u, sw);
-                return sw.toString();
+                session.setAttribute("rentic_auth_id", u.getId());
+
+                return Answer("200", "registered correctly", toJSON.User(u));
             } catch (Exception ex) {
                 return Error.build("300",ex.getMessage());
             }
         }
-        return Error.build("300","Your email is already registered!");
+        else if (n==1)
+            return Error.build("300","Your username is already registered!");
+        else
+            return Error.build("300","Your email is already registered!");
 
     }
 
