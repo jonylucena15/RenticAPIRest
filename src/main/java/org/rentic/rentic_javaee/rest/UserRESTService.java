@@ -8,6 +8,7 @@ import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
 import javax.ws.rs.Path;
 import javax.ws.rs.POST;
@@ -48,14 +49,17 @@ public class UserRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public String auth(
             @Context HttpServletRequest req,
+            @Context final HttpServletResponse response,
             @FormParam("username") String username,
-            @FormParam("password") String password) {
+            @FormParam("password") String password) throws IOException {
 
         // Access to the HTTP session
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("300","Sessions not supported!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
         }
 
         // Check if the session has the attribute "rentic_auth_id"
@@ -71,13 +75,19 @@ public class UserRESTService {
                     return Answer("200", "authenticated correctly", toJSON.User(u));
 
                 } catch (Exception ex) {
-                    return Error.build("300", ex.getMessage());
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    response.flushBuffer();
+                    return Error.build("500", ex.getMessage());
                 }
             } else {
-                return Error.build("300", "User or password incorrect!");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "User or password incorrect!");
             }
         } else {
-            return Error.build("301", "Already authenticated!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Already authenticated!");
         }
     }
 
@@ -85,12 +95,15 @@ public class UserRESTService {
     @POST
     @Produces("text/xml")
     public String logout(
-            @Context HttpServletRequest req) {
+            @Context HttpServletRequest req,
+            @Context final HttpServletResponse response) throws IOException {
 
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("300","Sessions not supported!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
         }
 
         if (session.getAttribute("rentic_auth_id") != null) {
@@ -100,10 +113,16 @@ public class UserRESTService {
 
                 return Answer("200", "logout correctly", "");
             } catch (Exception ex) {
-                return Error.build("300",ex.getMessage());
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500",ex.getMessage());
             }
-        }else
-            return Error.build("300","You aren't already authenticated!");
+        }else{
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You aren't already authenticated!");
+        }
+
     }
 
     @Path("register")
@@ -111,22 +130,27 @@ public class UserRESTService {
     @Produces("text/xml")
     public String register(
             @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
             @FormParam("username") String username,
             @FormParam("nomComplet") String nomComplet,
             @FormParam("email") String email,
             @FormParam("telefon") String telefon,
             @FormParam("facebookId") String facebookId,
             @FormParam("fotoPerfil") String fotoPerfil,
-            @FormParam("password") String password) {
+            @FormParam("password") String password) throws IOException {
 
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("300","Sessions not supported!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
         }
 
         if (session.getAttribute("rentic_auth_id") != null) {
-            return Error.build("300","You are already authenticated!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You are already authenticated!");
         }
 
         User u = new User(username, nomComplet, email, telefon, facebookId, fotoPerfil,  password);
@@ -139,14 +163,20 @@ public class UserRESTService {
 
                 return Answer("200", "registered correctly", toJSON.User(u));
             } catch (Exception ex) {
-                return Error.build("300",ex.getMessage());
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500",ex.getMessage());
             }
         }
-        else if (n==1)
-            return Error.build("300","Your username is already registered!");
-        else
-            return Error.build("300","Your email is already registered!");
-
+        else if (n==1) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Your username is already registered!");
+        }else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Your email is already registered!");
+        }
     }
 
     @GET
@@ -154,39 +184,49 @@ public class UserRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getUser(
             @Context HttpServletRequest req,
-            @PathParam("id") long id) {
+            @Context HttpServletResponse response,
+            @PathParam("id") long id) throws IOException {
 
         // Access to the HTTP session
         HttpSession session = req.getSession();
 
         if (session == null) {
-            return Error.build("300","Sessions not supported!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
         }
 
         Long userid = (Long) session.getAttribute("rentic_auth_id");
 
         // Check if the user is authenticated
         if (userid == null) {
-            return Error.build("300","You are not authenticated!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You are not authenticated!");
         }
 
         User u = userService.getUser(id);
 
         // Check if the user id exists
         if (u == null) {
-            return Error.build("300","User id == " + id + " does not exist!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","User id == " + id + " does not exist!");
         }
 
         // Check if the user is trying to access other user's data
         if (u.getId() != userid) {
-            return Error.build("300","You cannot access data fromm other users!");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You cannot access data fromm other users!");
         }
         try {
-            return toJSON.User(u);
+            return Answer("200", "User information", toJSON.User(u));
         } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
             Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
-            return Error.build("300","Error cocerting User to JSON!");
+            return Error.build("500","Error cocerting User to JSON!");
         }
     }
-
 }

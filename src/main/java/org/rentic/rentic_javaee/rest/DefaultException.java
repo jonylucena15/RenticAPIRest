@@ -16,5 +16,7 @@ import javax.ws.rs.ext.Provider;
       // Ideally we should create an ErrorResponse class to hold the error info.
       return Response.serverError().entity("{\"error\": \"Resource not exists in API\"}").type(MediaType.APPLICATION_JSON_TYPE).build();
     }
+
+
   }
 
