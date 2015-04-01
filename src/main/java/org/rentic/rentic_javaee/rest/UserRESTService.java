@@ -27,7 +27,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 // This class is used to process all the authentication related URLs
-@Path("/users")
+@Path("/usuaris")
 @RequestScoped
 public class UserRESTService {
 
