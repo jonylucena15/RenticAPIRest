@@ -111,7 +111,7 @@ public class UserRESTService {
 
                 session.setAttribute("rentic_auth_id",null);
 
-                return Answer("200", "logout correctly", "");
+                return Answer("200", "logout correctly", "{}");
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
