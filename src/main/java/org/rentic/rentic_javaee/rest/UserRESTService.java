@@ -40,8 +40,8 @@ public class UserRESTService {
 
 
 
-    public String Answer(String code, String errormsg, String data){
-            return "{\"code\":"+code+", \"message\":\""+errormsg+"\", \"data\":"+data+"}" ;
+    public String Answer(String code, String data){
+            return "{\"code\":"+code+", \"message\":"+null+", \"data\":"+data+"}" ;
     }
 
     @POST
@@ -72,7 +72,7 @@ public class UserRESTService {
                     // to identify the user in the next calls
                     session.setAttribute("rentic_auth_id", u.getId());
 
-                    return Answer("200", "authenticated correctly", toJSON.User(u));
+                    return Answer("200", toJSON.User(u));
 
                 } catch (Exception ex) {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -111,7 +111,7 @@ public class UserRESTService {
 
                 session.setAttribute("rentic_auth_id",null);
 
-                return Answer("200", "logout correctly", "{}");
+                return Answer("200", "{}");
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
@@ -161,7 +161,7 @@ public class UserRESTService {
             try {
                 session.setAttribute("rentic_auth_id", u.getId());
 
-                return Answer("200", "registered correctly", toJSON.User(u));
+                return Answer("200", toJSON.User(u));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
@@ -221,7 +221,7 @@ public class UserRESTService {
             return Error.build("500","You cannot access data fromm other users!");
         }
         try {
-            return Answer("200", "User information", toJSON.User(u));
+            return Answer("200", toJSON.User(u));
         } catch (IOException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
