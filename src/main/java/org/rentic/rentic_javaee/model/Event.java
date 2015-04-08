@@ -2,7 +2,7 @@ package org.rentic.rentic_javaee.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+//Provant commit des del IntelliJ
 /**
  * Created with IntelliJ IDEA.
  * User: imartin
