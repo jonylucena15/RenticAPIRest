@@ -93,7 +93,7 @@ public class UserRESTService {
 
     @Path("logout")
     @POST
-    @Produces("text/xml")
+    @Produces(MediaType.APPLICATION_JSON)
     public String logout(
             @Context HttpServletRequest req,
             @Context final HttpServletResponse response) throws IOException {
@@ -127,7 +127,7 @@ public class UserRESTService {
 
     @Path("register")
     @POST
-    @Produces("text/xml")
+    @Produces(MediaType.APPLICATION_JSON)
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,

@@ -5,20 +5,19 @@
  */
 package org.rentic.rentic_javaee.util;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.rentic.rentic_javaee.model.Task;
+import org.rentic.rentic_javaee.model.User;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.rentic.rentic_javaee.model.User;
-import org.rentic.rentic_javaee.model.Task;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
