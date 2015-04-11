@@ -34,7 +34,6 @@ public class InitDB {
             User exists = em.find(User.class, 1L);
             if (exists == null) {
                 User u = new User();
-                u.setUsername("yo");
                 u.setPassword("malament");
                 u.setNomComplet("provaa sadsa");
                 u.setEmail("yo@hotmail.com");

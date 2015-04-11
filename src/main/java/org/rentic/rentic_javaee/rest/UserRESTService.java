@@ -50,7 +50,7 @@ public class UserRESTService {
     public String auth(
             @Context HttpServletRequest req,
             @Context final HttpServletResponse response,
-            @FormParam("username") String username,
+            @FormParam("email") String email,
             @FormParam("password") String password) throws IOException {
 
         // Access to the HTTP session
@@ -65,7 +65,7 @@ public class UserRESTService {
         // Check if the session has the attribute "rentic_auth_id"
         if (session.getAttribute("rentic_auth_id") == null) {
             // If the user is not authenticated we have to check if the password match
-            User u = userService.matchPassword(username, password);
+            User u = userService.matchPassword(email, password);
             if (u != null) {
                 try {
                     // The username and password match, add the "rentic_auth_id" attribute to the session
@@ -131,7 +131,6 @@ public class UserRESTService {
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
-            @FormParam("username") String username,
             @FormParam("nomComplet") String nomComplet,
             @FormParam("email") String email,
             @FormParam("telefon") String telefon,
@@ -153,11 +152,11 @@ public class UserRESTService {
             return Error.build("500","You are already authenticated!");
         }
 
-        User u = new User(username, nomComplet, email, telefon, facebookId, fotoPerfil,  password);
+        User u = new User(nomComplet, email, telefon, facebookId, fotoPerfil,  password);
 
-        int  n = userService.register(u);
+        boolean  n = userService.register(u);
 
-        if (n == 0) {
+        if (n) {
             try {
                 session.setAttribute("rentic_auth_id", u.getId());
 
@@ -167,11 +166,6 @@ public class UserRESTService {
                 response.flushBuffer();
                 return Error.build("500",ex.getMessage());
             }
-        }
-        else if (n==1) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.flushBuffer();
-            return Error.build("500", "Your username is already registered!");
         }else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();

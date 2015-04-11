@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email", "username"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class User implements Serializable {
     /**
      * Default value included to remove warning. Remove or modify at will. *
@@ -24,9 +24,6 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
-
-    @NotNull
-    private String username;
 
     private String nomComplet;
 
@@ -48,7 +45,6 @@ public class User implements Serializable {
     private Collection<Task> tasks;
 
     public User(){
-        this.username="";
         this.nomComplet="";
         this.email="";
         this.telefon="";
@@ -57,8 +53,7 @@ public class User implements Serializable {
         this.password="";
     }
 
-    public User(String username,String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password ){
-        this.username=username;
+    public User(String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password ){
         this.nomComplet=nomComplet;
         this.email=email;
         this.telefon=telefon;
@@ -81,14 +76,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
