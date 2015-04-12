@@ -125,7 +125,6 @@ public class UserRESTService {
     @Path("register")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-   // @Consumes(MediaType.APPLICATION_JSON)
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
@@ -149,8 +148,7 @@ public class UserRESTService {
             response.flushBuffer();
             return Error.build("500","You are already authenticated!");
         }
-        // ObjectMapper mapper = new ObjectMapper();
-       //User u = mapper.readValue(req.getParameter("prova"), User.class);
+
         User u = new User(nomComplet, email, telefon, facebookId, fotoPerfil,  password);
 
         boolean  n = userService.register(u);
