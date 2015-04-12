@@ -2,18 +2,17 @@ package org.rentic.rentic_javaee.rest;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.json.Json;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
-import javax.ws.rs.Path;
-import javax.ws.rs.POST;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,8 +21,6 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 // This class is used to process all the authentication related URLs
@@ -128,6 +125,7 @@ public class UserRESTService {
     @Path("register")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+   // @Consumes(MediaType.APPLICATION_JSON)
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
@@ -151,7 +149,8 @@ public class UserRESTService {
             response.flushBuffer();
             return Error.build("500","You are already authenticated!");
         }
-
+        // ObjectMapper mapper = new ObjectMapper();
+       //User u = mapper.readValue(req.getParameter("prova"), User.class);
         User u = new User(nomComplet, email, telefon, facebookId, fotoPerfil,  password);
 
         boolean  n = userService.register(u);
