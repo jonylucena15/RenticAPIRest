@@ -1,6 +1,8 @@
 package org.rentic.rentic_javaee.rest;
 
 import java.lang.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.ejb.EJB;
@@ -87,38 +89,50 @@ public class TaskRESTService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public String addTask(@Context HttpServletRequest req,
-            @FormParam("text") String text,
-            @FormParam("dateCreated") Date dateCreated,
-            @FormParam("dateLimit") Date dateLimit) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String addTask(R_Task task, @Context HttpServletRequest req) throws ParseException {
 
         HttpSession session = req.getSession();
 
         if (session == null) {
             return Error.build("300","Sessions not supported!");
         }
-        
+
         Long userId = (Long) session.getAttribute("rentic_auth_id");
-        
+
         if (userId == null) {
             return Error.build("300","User not authenticated!");
         }
 
-        if (text == null) {
+        if (task.text == null) {
             return Error.build("300","No text supplied");
         }
-        if (dateCreated == null) {
+        if (task.dateCreated == null) {
             return Error.build("300","No creation date supplied");
         }
-        if (dateLimit == null) {
+        if (task.dateLimit == null) {
             return Error.build("300","No limit date supplied");
         }
 
+
+        String pattern = "dd-MM-yyyy HH:mm";
+        SimpleDateFormat fmt = new SimpleDateFormat(pattern);
+
+        Date dateCreated = fmt.parse(task.dateCreated);
+        Date dateLimit = fmt.parse(task.dateLimit);
+
         try {
-            Task t = taskService.addTask(text, userId, dateCreated, dateLimit);
+            Task t = taskService.addTask(task.text, userId, dateCreated, dateLimit);
             return toJSON.Object(t);
         } catch (Exception ex) {
             return Error.build("300",ex.getMessage());
         }
     }
+
+    static class R_Task {
+        public String text;
+        public String dateCreated;
+        public String dateLimit;
+    }
+
 }
