@@ -1,13 +1,13 @@
 package org.rentic.rentic_javaee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.rentic.rentic_javaee.rest.Coordenades;
-import org.rentic.rentic_javaee.rest.Disponibilitat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Objecte implements Serializable{
@@ -22,38 +22,44 @@ public class Objecte implements Serializable{
 
     private float preu;
 
-    private Coordenades coordenada;
-
     @ElementCollection
     private List<String> tags;
 
-    @ElementCollection
-    private List<Disponibilitat> disponible;
+    @NotNull
+    private Boolean dispCapDeSetmana;
 
-    @Column(name = "idUsuari", insertable = false, updatable = false)
-    private Long userId;
+    @NotNull
+    private Boolean dispEntreDeSetmana;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
+    @JsonIgnore
+    private Collection<Disponibilitat> dispRang;
+
+    @OneToOne(optional=false, mappedBy="objecte")
+    public Coordenades coordenades;
 
     @ManyToOne
     @JoinColumn(name = "idUsuari", nullable=false)
     @JsonIgnore
-    private User user;
+    public User user;
+
 
     public Objecte(){
         this.nom = "";
         this.descripcio = "";
         this.preu = 0;
-        this.coordenada = null;
         this.tags = null;
-        this.disponible = null;
+        this.dispCapDeSetmana=false;
+        this.dispEntreDeSetmana=false;
     }
 
-    public Objecte(String nom, String descripcio, float preu, Coordenades coordenada, List<String> tags, List<Disponibilitat> disponible) {
+    public Objecte(String nom, String descripcio, float preu, List<String> tags,Boolean dispCapDeSetmana, Boolean dispEntreDeSetmana) {
         this.nom = nom;
         this.descripcio = descripcio;
         this.preu = preu;
-        this.coordenada = coordenada;
         this.tags = tags;
-        this.disponible = disponible;
+        this.dispEntreDeSetmana=dispEntreDeSetmana;
+        this.dispCapDeSetmana=dispCapDeSetmana;
     }
 
     public Long getId() {
@@ -88,14 +94,6 @@ public class Objecte implements Serializable{
         this.preu = preu;
     }
 
-    public Coordenades getCoordenada() {
-        return coordenada;
-    }
-
-    public void setCoordenada(Coordenades coordenada) {
-        this.coordenada = coordenada;
-    }
-
     public List<String> getTags() {
         return tags;
     }
@@ -104,19 +102,24 @@ public class Objecte implements Serializable{
         this.tags = tags;
     }
 
-    public List<Disponibilitat> getDisponible() {
-        return disponible;
+    public Collection<Disponibilitat> getDisponibilitats() {
+        dispRang.size();
+        return dispRang;
     }
 
-    public void setDisponible(List<Disponibilitat> disponible) {
-        this.disponible = disponible;
+    public void setDisponibilitats(List<Disponibilitat> ts) {
+        this.dispRang = ts;
     }
 
-    public User getUser() {
-        return user;
+    public void addDisponibilitat(Disponibilitat disponibilitat) {
+        dispRang.add(disponibilitat);
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public Coordenades getCoordenades() { return coordenades; }
+
+    public void setCoordenades(Coordenades ts) {
+        this.coordenades = ts;
     }
+
+    public User getUser() { return user;     }
 }

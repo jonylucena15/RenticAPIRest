@@ -16,7 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.rentic.rentic_javaee.model.Event;
+
 import org.rentic.rentic_javaee.model.Task;
 import org.rentic.rentic_javaee.service.TaskService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -75,8 +75,8 @@ public class TaskRESTService {
         }
 
         try {
-            taskService.event();
-            Event e = taskService.event2();
+            /*taskService.event();
+            Event e = taskService.event2();*/
 
             final TaskService.TaskList results = taskService.getTasks(userId);
             return toJSON.Object(results);

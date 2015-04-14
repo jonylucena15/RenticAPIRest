@@ -1,10 +1,23 @@
-package org.rentic.rentic_javaee.rest;
+package org.rentic.rentic_javaee.model;
 
+import javax.persistence.*;
 
+@Entity
 public class Coordenades {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
     private float longitud;
+
     private float latitud;
+
+    @OneToOne(optional=false)
+    @JoinColumn(name="idObjecte", unique=true, nullable=false, updatable=false)
+    public Objecte objecte;
+    public Objecte getObjecte() { return objecte; }
 
     public Coordenades(){
         longitud=0;

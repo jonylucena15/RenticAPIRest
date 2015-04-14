@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.rentic.rentic_javaee.model.Event;
 import org.rentic.rentic_javaee.model.Task;
 import org.rentic.rentic_javaee.model.User;
 
@@ -63,7 +62,7 @@ public class TaskService {
         em.persist(task);
         return task;
     }
-
+/*
     public void event() {
         Event e = new Event();
         em.persist(e);
@@ -77,5 +76,7 @@ public class TaskService {
 
     public Event event2() {
         return em.find(Event.class, 1L);
-    }
+   }
+
+   */
 }

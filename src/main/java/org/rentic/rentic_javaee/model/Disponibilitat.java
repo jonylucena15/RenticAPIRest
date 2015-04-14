@@ -1,16 +1,39 @@
-package org.rentic.rentic_javaee.rest;
+package org.rentic.rentic_javaee.model;
 
 
-import javax.persistence.Temporal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Date;
-
+@Entity
 public class Disponibilitat {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date inici;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fi;
+
+    @Column(name = "idObjecte", insertable = false, updatable = false)
+    private Long idObjecte;
+
+    @ManyToOne
+    @JoinColumn(name = "idObjecte", nullable=false)
+    @JsonIgnore
+    private Objecte objecte;
+
+    public Objecte getObjecte() {
+        return objecte;
+    }
+
+    public void setObjecte(Objecte objecte) {
+        this.objecte = objecte;
+    }
+
 
     public Disponibilitat(){
         this.inici=null;
