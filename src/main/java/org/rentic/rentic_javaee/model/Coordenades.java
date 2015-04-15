@@ -1,5 +1,7 @@
 package org.rentic.rentic_javaee.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,8 +16,13 @@ public class Coordenades {
 
     private float latitud;
 
-    @OneToOne(optional=false)
+
+    @Column(name = "idObjecte", insertable = false, updatable = false)
+    private Long idObjecte;
+
+    @OneToOne
     @JoinColumn(name="idObjecte", unique=true, nullable=false, updatable=false)
+    @JsonIgnore
     public Objecte objecte;
     public Objecte getObjecte() { return objecte; }
 

@@ -1,17 +1,13 @@
 package org.rentic.rentic_javaee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
@@ -44,6 +40,11 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Task> tasks;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Collection<Objecte> objectes;
+
+
     public User(){
         this.nomComplet="";
         this.email="";
@@ -53,7 +54,7 @@ public class User implements Serializable {
         this.password="";
     }
 
-    public User(String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password ){
+    public User(String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password){
         this.nomComplet=nomComplet;
         this.email=email;
         this.telefon=telefon;
@@ -117,6 +118,19 @@ public class User implements Serializable {
 
     public void addTask(Task task) {
         tasks.add(task);
+    }
+
+    public Collection<Objecte> getObjecte() {
+        objectes.size();
+        return objectes;
+    }
+
+    public void setObjecte(List<Objecte> ts) {
+        this.objectes = ts;
+    }
+
+    public void addObjecte(Objecte objecte) {
+        objectes.add(objecte);
     }
 
 }

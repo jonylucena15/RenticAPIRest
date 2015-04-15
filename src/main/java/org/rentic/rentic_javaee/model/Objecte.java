@@ -29,14 +29,16 @@ public class Objecte implements Serializable{
     private Boolean dispCapDeSetmana;
 
     @NotNull
-    private Boolean dispEntreDeSetmana;
+    private Boolean dispEntreSetmana;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "objecte")
     private Collection<Disponibilitat> dispRang;
 
-    @OneToOne(optional=false, mappedBy="objecte")
+    @OneToOne(mappedBy="objecte")
     public Coordenades coordenades;
+
+   @Column(name = "idUsuari", insertable = false, updatable = false)
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "idUsuari", nullable=false)
@@ -50,7 +52,7 @@ public class Objecte implements Serializable{
         this.preu = 0;
         this.tags = null;
         this.dispCapDeSetmana=false;
-        this.dispEntreDeSetmana=false;
+        this.dispEntreSetmana=false;
     }
 
     public Objecte(String nom, String descripcio, float preu, List<String> tags,Boolean dispCapDeSetmana, Boolean dispEntreDeSetmana) {
@@ -58,7 +60,7 @@ public class Objecte implements Serializable{
         this.descripcio = descripcio;
         this.preu = preu;
         this.tags = tags;
-        this.dispEntreDeSetmana=dispEntreDeSetmana;
+        this.dispEntreSetmana=dispEntreDeSetmana;
         this.dispCapDeSetmana=dispCapDeSetmana;
     }
 
