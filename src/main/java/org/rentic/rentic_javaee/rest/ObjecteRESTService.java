@@ -36,7 +36,7 @@ public class ObjecteRESTService {
     @Inject
     ToJSON toJSON;
 
-    static class inserir {
+    public static class objecte {
         public String nom;
         public String descripcio;
         public float preu;
@@ -55,7 +55,7 @@ public class ObjecteRESTService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String obtenir(@Context HttpServletRequest req, @Context HttpServletResponse response, inserir i) throws IOException {
+    public String obtenir(@Context HttpServletRequest req, @Context HttpServletResponse response, objecte i) throws Exception {
 
         HttpSession session = req.getSession();
 
@@ -71,32 +71,13 @@ public class ObjecteRESTService {
             return Error.build("500","You are not authenticated!");
         }
 
-        Objecte o = new Objecte(i.nom,i.descripcio,i.preu,i.tags,i.dispCapDeSetmana,i.dispEntreDeSetmana);
+        Long userId = (Long) session.getAttribute("simpleapp_auth_id");
 
-        Coordenades coor = new Coordenades(i.latitud,i.longitud);
+        Objecte o = objecteService.addObjecte(i, userId);
 
-        o.setCoordenades(coor);
-
-        try {
-            for(Pair<String,String> a : i.dispRang) {
-                String pattern = "dd-MM-yyyy";
-                SimpleDateFormat fmt = new SimpleDateFormat(pattern);
-
-                Date inici = fmt.parse(a.getKey());
-                Date fi = fmt.parse(a.getValue());
-
-                Disponibilitat disp=new Disponibilitat(inici,fi);
-                o.addDisponibilitat(disp);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        boolean  n = objecteService.inserir(o);
-
-        if (n) {
+        if (o!=null) {
             try {
-                return Answer("200", toJSON.User(o.getUser())); //TODO Comprovar si funciona bé el toJSON amb l'Objecte sencer
+                return Answer("200", toJSON.Object(o));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
@@ -105,7 +86,8 @@ public class ObjecteRESTService {
         }else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Your email is already registered!");
+            return Error.build("500", "No s'ha inserit be l'objecte");
         }
+
     }
 }

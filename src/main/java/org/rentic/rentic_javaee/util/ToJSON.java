@@ -37,8 +37,6 @@ public class ToJSON {
         }
     }
 
-
-
     public String User(User u) throws IOException {
         StringWriter sw = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();

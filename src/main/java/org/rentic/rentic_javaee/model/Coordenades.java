@@ -3,10 +3,15 @@ package org.rentic.rentic_javaee.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Coordenades {
+public class Coordenades implements Serializable {
 
+    /**
+     * Default value included to remove warning. Remove or modify at will. *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +21,10 @@ public class Coordenades {
 
     private float latitud;
 
-
-    @Column(name = "idObjecte", insertable = false, updatable = false)
-    private Long idObjecte;
-
-    @OneToOne
-    @JoinColumn(name="idObjecte", unique=true, nullable=false, updatable=false)
+    @OneToOne(fetch = FetchType.LAZY,optional=false,mappedBy="coordenades")
     @JsonIgnore
-    public Objecte objecte;
+    private Objecte objecte;
+
     public Objecte getObjecte() { return objecte; }
 
     public Coordenades(){

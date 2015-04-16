@@ -1,7 +1,6 @@
 package org.rentic.rentic_javaee.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -44,52 +43,19 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Objecte> objectes;
 
+    public User getUser(){  return this; }
 
-    public User(){
-        this.nomComplet="";
-        this.email="";
-        this.telefon="";
-        this.facebookId="";
-        this.fotoPerfil="";
-        this.password="";
-    }
+    public Long getId() { return id; }
 
-    public User(String nomComplet, String email, String telefon, String facebookId, String fotoPerfil, String password){
-        this.nomComplet=nomComplet;
-        this.email=email;
-        this.telefon=telefon;
-        this.facebookId=facebookId;
-        this.fotoPerfil=fotoPerfil;
-        this.password=password;
-    }
+    public void setId(Long id) {  this.id = id; }
 
-    public User getUser(){
-        return this;
-    }
+    public String getPassword() { return password;  }
 
-    public Long getId() {
-        return id;
-    }
+    public void setPassword(String password) {  this.password = password;  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEmail() { return email;  }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) {  this.email = email;  }
 
     public String getNomComplet() { return nomComplet;  }
 
@@ -116,9 +82,7 @@ public class User implements Serializable {
         this.tasks = ts;
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
-    }
+    public void addTask(Task task) { tasks.add(task);  }
 
     public Collection<Objecte> getObjecte() {
         objectes.size();
@@ -129,8 +93,5 @@ public class User implements Serializable {
         this.objectes = ts;
     }
 
-    public void addObjecte(Objecte objecte) {
-        objectes.add(objecte);
-    }
-
+    public void addObjecte(Objecte objecte) {  objectes.add(objecte); }
 }

@@ -36,7 +36,6 @@ public class UserRESTService {
     ToJSON toJSON;
 
 
-
     public String Answer(String code, String data){
             return "{\"code\":"+code+", \"message\":"+null+", \"data\":"+data+"}" ;
     }
@@ -44,6 +43,14 @@ public class UserRESTService {
     static class login {
         public String email;
         public String password;
+    }
+    public static class registre {
+        public String email;
+        public String password;
+        public String nomComplet;
+        public String telefon;
+        public String fotoPerfil;
+        public String facebookId;
     }
 
     @POST
@@ -134,7 +141,7 @@ public class UserRESTService {
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
-            User u) throws IOException {
+            registre u) throws IOException {
 
         HttpSession session = req.getSession();
 
@@ -150,13 +157,13 @@ public class UserRESTService {
             return Error.build("500","You are already authenticated!");
         }
 
-        boolean  n = userService.register(u);
+        User nu = userService.register(u);
 
-        if (n) {
+        if (nu!=null) {
             try {
-                session.setAttribute("rentic_auth_id", u.getId());
+                session.setAttribute("rentic_auth_id", nu.getId());
 
-                return Answer("200", toJSON.User(u));
+                return Answer("200", toJSON.User(nu));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();

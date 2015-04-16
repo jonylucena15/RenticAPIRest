@@ -75,9 +75,6 @@ public class TaskRESTService {
         }
 
         try {
-            /*taskService.event();
-            Event e = taskService.event2();*/
-
             final TaskService.TaskList results = taskService.getTasks(userId);
             return toJSON.Object(results);
         } catch (EJBException ex) {

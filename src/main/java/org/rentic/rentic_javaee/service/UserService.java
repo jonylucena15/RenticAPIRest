@@ -1,6 +1,7 @@
 package org.rentic.rentic_javaee.service;
 
 import org.rentic.rentic_javaee.model.User;
+import org.rentic.rentic_javaee.rest.UserRESTService;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -27,16 +28,26 @@ public class UserService {
         }
     }
 
-    public boolean register(User nu) {
+    public User register(UserRESTService.registre nu) {
         Query q = em.createQuery("select u from User u where u.email=:email");
-        q.setParameter("email", nu.getEmail());
+        q.setParameter("email", nu.email);
 
         List results = q.getResultList();
         if (results.isEmpty()) {
-            em.persist(nu);
-            return true;
+            User usuari= new User();
+
+            usuari.setEmail(nu.email);
+            usuari.setFacebookId(nu.facebookId);
+            usuari.setTelefon(nu.telefon);
+            usuari.setFotoPerfil(nu.fotoPerfil);
+            usuari.setPassword(nu.password);
+            usuari.setNomComplet(nu.nomComplet);
+
+            em.persist(usuari);
+            em.flush();
+            return usuari;
         }else
-            return false;
+            return null;
 
     }
 

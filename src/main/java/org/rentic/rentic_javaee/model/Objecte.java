@@ -11,6 +11,10 @@ import java.util.Set;
 
 @Entity
 public class Objecte implements Serializable{
+    /**
+     * Default value included to remove warning. Remove or modify at will. *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,48 +29,29 @@ public class Objecte implements Serializable{
     @ElementCollection
     private List<String> tags;
 
-    @NotNull
     private Boolean dispCapDeSetmana;
 
-    @NotNull
     private Boolean dispEntreSetmana;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "objecte")
     private Collection<Disponibilitat> dispRang;
 
-    @OneToOne(mappedBy="objecte")
-    public Coordenades coordenades;
+    @Column(name = "idCoordenades", insertable = false, updatable = false)
+    private Long idCoordenades;
 
-   @Column(name = "idUsuari", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="idCoordenades", unique=true, nullable=false, updatable=false)
+    private Coordenades coordenades;
+
+    @Column(name = "idUser", insertable = false, updatable = false)
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "idUsuari", nullable=false)
+    @JoinColumn(name = "idUser", nullable=false)
     @JsonIgnore
-    public User user;
+    private User user;
 
-
-    public Objecte(){
-        this.nom = "";
-        this.descripcio = "";
-        this.preu = 0;
-        this.tags = null;
-        this.dispCapDeSetmana=false;
-        this.dispEntreSetmana=false;
-    }
-
-    public Objecte(String nom, String descripcio, float preu, List<String> tags,Boolean dispCapDeSetmana, Boolean dispEntreDeSetmana) {
-        this.nom = nom;
-        this.descripcio = descripcio;
-        this.preu = preu;
-        this.tags = tags;
-        this.dispEntreSetmana=dispEntreDeSetmana;
-        this.dispCapDeSetmana=dispCapDeSetmana;
-    }
-
-    public Long getId() {
-        return id;
-    }
+    public Long getId() {  return id;  }
 
     public void setId(Long id) {
         this.id = id;
@@ -109,9 +94,7 @@ public class Objecte implements Serializable{
         return dispRang;
     }
 
-    public void setDisponibilitats(List<Disponibilitat> ts) {
-        this.dispRang = ts;
-    }
+    public void setDisponibilitats(List<Disponibilitat> ts) {  this.dispRang = ts;   }
 
     public void addDisponibilitat(Disponibilitat disponibilitat) {
         dispRang.add(disponibilitat);
@@ -119,9 +102,21 @@ public class Objecte implements Serializable{
 
     public Coordenades getCoordenades() { return coordenades; }
 
-    public void setCoordenades(Coordenades ts) {
-        this.coordenades = ts;
+   public void setCoordenades(Coordenades ts) {  this.coordenades = ts; }
+
+    public User getUser() {
+        return user;
     }
 
-    public User getUser() { return user;     }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Boolean getDispCapDeSetmana() { return dispCapDeSetmana;    }
+
+    public void setDispCapDeSetmana(Boolean dispCapDeSetmana) {   this.dispCapDeSetmana = dispCapDeSetmana;    }
+
+    public Boolean getDispEntreSetmana() {  return dispEntreSetmana;    }
+
+    public void setDispEntreSetmana(Boolean dispEntreSetmana) {        this.dispEntreSetmana = dispEntreSetmana;    }
 }
