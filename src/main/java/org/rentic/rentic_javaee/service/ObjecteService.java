@@ -5,7 +5,7 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.model.User;
 
-import org.rentic.rentic_javaee.util.FromJSON;
+import org.rentic.rentic_javaee.util.FromJSONObject;
 
 
 import javax.ejb.EJBException;
@@ -41,7 +41,7 @@ public class ObjecteService {
 
         User user = em.find(User.class, userId);
 
-        Objecte o= FromJSON.getObject(Objecte.class, i);
+        Objecte o= FromJSONObject.getObject(Objecte.class, i);
         o.setImatges(uploadImage(inPart));
         o.setUser(user);
         user.addObjecte(o);
