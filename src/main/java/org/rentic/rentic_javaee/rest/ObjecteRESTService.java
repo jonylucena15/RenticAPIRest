@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 
 @Path("/objectes")
@@ -83,9 +85,15 @@ public class ObjecteRESTService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String listAllObjectes(
+    public String listObjectes(
             @Context HttpServletRequest req,
-            @Context HttpServletResponse response) throws IOException {
+            @Context HttpServletResponse response,
+            @QueryParam("limit") int limit,
+            @QueryParam("user") Long idUser,
+            @QueryParam("latitud")  Double latitud,
+            @QueryParam("longitud") Double longitud,
+            @QueryParam("orderBy") List<String> orderBy) throws IOException {
+
         HttpSession session = req.getSession();
 
         if (session == null) {
@@ -101,7 +109,7 @@ public class ObjecteRESTService {
         }
 
         try {
-            final ObjecteService.ObjectList results = objecteService.getObjectes(userId);
+            final ObjecteService.ObjectList results = objecteService.getObjectes(idUser,limit,orderBy, latitud, longitud);
             return Answer("200", toJSON.Object(results));
         } catch (EJBException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -113,7 +121,6 @@ public class ObjecteRESTService {
             return Error.build("500", ex.getMessage());
         }
     }
-
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -161,6 +168,46 @@ public class ObjecteRESTService {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
             return Error.build("500", "Error guardant imatge");
+        }
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteObjecte(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Sessions not supported!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+
+        if (userId == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "User not authenticated!");
+        }
+
+        try {
+
+            // Check that the user authenticated in the session owns the object it is trying to access
+            if ( !objecteService.deleteObjecte(id, userId)) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "No pots eliminar aquet objecte, no ets el propietari");
+            }
+            return Answer("200", "{}");
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", ex.getMessage());
         }
     }
 }

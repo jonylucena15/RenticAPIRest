@@ -13,9 +13,8 @@ public class Disponibilitat implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @Column (name = "DATA_INICI")
+    @Column(name = "DATA_INICI")
     private String dataInici;
-
 
     @Column(name = "DATA_FI")
     private String dataFi;

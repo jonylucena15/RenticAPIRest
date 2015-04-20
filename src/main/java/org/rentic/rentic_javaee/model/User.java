@@ -17,27 +17,30 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "USUARI_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @Column(name = "NOM_COMPLET")
     private String nomComplet;
 
     @NotNull
+    @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "TELEFON")
     private String telefon;
 
+    @Column(name = "FACEBOOK_ID")
     private String facebookId;
 
+    @Column(name = "FOTO_PERFIL")
     private String fotoPerfil;
 
     @NotNull
     @JsonIgnore
+    @Column(name = "PASSWORD")
     private String password;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    private Collection<Task> tasks;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
@@ -70,17 +73,6 @@ public class User implements Serializable {
     public String getFotoPerfil() { return fotoPerfil; }
 
     public void setFotoPerfil(String fotoPerfil) { this.fotoPerfil = fotoPerfil; }
-
-    public Collection<Task> getTasks() {
-        tasks.size();
-        return tasks;
-    }
-
-    public void setTasks(List<Task> ts) {
-        this.tasks = ts;
-    }
-
-    public void addTask(Task task) { tasks.add(task);  }
 
     public Collection<Objecte> getObjectes() {
         objectes.size();

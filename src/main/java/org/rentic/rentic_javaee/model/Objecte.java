@@ -17,60 +17,63 @@ public class Objecte implements Serializable{
 
 
     @Id
-    @Column (name = "ID")
+    @Column(name = "ID_OBJECTE")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column (name = "NOM")
+    @Column(name = "NOM")
     private String nom;
 
     @Column(name = "DESCRIPCIO")
     private String descripcio;
 
-    @Column (name = "PREU")
+    @Column(name = "PREU")
     private Number preu;
 
     @ElementCollection
     @CollectionTable(
             name="IMATGES",
-            joinColumns=@JoinColumn(name="IMATGE_ID")
+            joinColumns=@JoinColumn(name="OBJECTE_ID")
     )
-    @Column (name = "IMATGE")
+
+    @Column(name = "URL_IMATGE")
     private List<String> imatges;
 
     @ElementCollection
     @CollectionTable(
             name="TAGS",
-            joinColumns=@JoinColumn(name="TAGS_ID")
+            joinColumns=@JoinColumn(name="OBJECTE_ID")
     )
+
     @Column (name = "NOM_TAG")
     private List<String> tags;
 
-    @Column (name = "DISP_CAPS_DE_SETMANA")
+    @Column(name = "DISP_CAP_DE_SETMANA")
     private Boolean dispCapDeSetmana;
 
-    @Column (name = "DISP_ENTRE_SETMANA")
+    @Column(name = "DISP_ENTRE_SETMANA")
     private Boolean dispEntreSetmana;
 
     @ElementCollection
     @CollectionTable(
             name="DISPONIBILITAT_RANGS",
-            joinColumns=@JoinColumn(name="DISP_RANGS_ID")
+            joinColumns=@JoinColumn(name="OBJECTE_ID")
     )
-    @Column (name = "DISP_RANGS")
+
+    @Column(name = "DISP_RANGS")
     private List<Disponibilitat> dispRangs;
 
-    @Column (name = "LONGITUD")
+    @Column(name = "LONGITUD")
     private Number longitud;
 
-    @Column (name = "LATITUD")
+    @Column(name = "LATITUD")
     private Number latitud;
 
-    @Column(name = "idUser", insertable = false, updatable = false)
+    @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable=false)
+    @JoinColumn(name = "USUARI_ID", nullable=false)
     @JsonIgnore
     private User user;
 
