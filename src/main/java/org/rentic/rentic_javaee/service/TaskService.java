@@ -62,21 +62,4 @@ public class TaskService {
         em.persist(task);
         return task;
     }
-/*
-    public void event() {
-        Event e = new Event();
-        em.persist(e);
-        for (int i = 0; i < 10; ++i) {
-            Event e2 = new Event();
-            e2.setEventBefore(e);
-            em.persist(e2);
-            e = e2;
-        }
-    }
-
-    public Event event2() {
-        return em.find(Event.class, 1L);
-   }
-
-   */
 }

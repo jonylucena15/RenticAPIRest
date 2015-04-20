@@ -1,19 +1,26 @@
 package org.rentic.rentic_javaee.service;
 
-import javafx.util.Pair;
-import org.rentic.rentic_javaee.model.Coordenades;
-import org.rentic.rentic_javaee.model.Disponibilitat;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+
 import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.model.User;
-import org.rentic.rentic_javaee.rest.ObjecteRESTService;
 
+import org.rentic.rentic_javaee.util.FromJSON;
+
+
+import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -22,61 +29,99 @@ public class ObjecteService {
 
     @PersistenceContext
     private EntityManager em;
-/*
-    public boolean insert(Objecte o) {
-        Query q = em.createQuery("select u from Objecte u where u.id=:id");
-        q.setParameter("id", o.getId());
 
-        List results = q.getResultList();
-        if (results.isEmpty()) {
-            em.persist(o);
-            return true;
-        }else
-            return false;
 
+    @XmlRootElement(name="collection")
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public class ObjectList {
+        public Collection<Objecte> objectes;
     }
-  */
-    public Objecte addObjecte(ObjecteRESTService.objecte i, Long userId) throws Exception {
 
-        Coordenades coor = new Coordenades(i.latitud,i.longitud);
-
-
+    public Objecte addObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
 
         User user = em.find(User.class, userId);
 
-
-        Objecte o=new Objecte();
+        Objecte o= FromJSON.getObject(Objecte.class, i);
+        o.setImatges(uploadImage(inPart));
         o.setUser(user);
-        o.setNom(i.nom);
-        o.setCoordenades(coor);
-        o.setDescripcio(i.descripcio);
-        o.setPreu(i.preu);
-        o.setTags(i.tags);
-        o.setDispCapDeSetmana(i.dispCapDeSetmana);
-        o.setDispEntreSetmana(i.dispEntreDeSetmana);
-
-
-        for(Pair<String,String> a : i.dispRang) {
-            String pattern = "dd-MM-yyyy";
-            SimpleDateFormat fmt = new SimpleDateFormat(pattern);
-
-            Date inici = fmt.parse(a.getKey());
-            Date fi = fmt.parse(a.getValue());
-
-            Disponibilitat disp=new Disponibilitat(inici,fi);
-            o.addDisponibilitat(disp);
-        }
-
-
         user.addObjecte(o);
 
         em.persist(o);
-        em.flush();
+
         return o;
     }
-/*
-    public Objecte getObjecte(long id) {
+
+    public ObjectList getObjectes(Long id) {
+        ObjectList o = new ObjectList();
+        try {
+            User u = em.find(User.class, id);
+            o.objectes = u.getObjectes();
+            return o;
+        }
+        catch (Exception ex) {
+            // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
+            // We catch the normal exception and then transform it in a EJBException
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
+    public  Objecte getObjecte(Long id) throws Exception {
         return em.find(Objecte.class, id);
     }
-*/
+
+    public List<String> uploadImage(List<InputPart> inPart) {
+
+        List<String> imatges= new ArrayList<String>();
+        for (InputPart inputPart : inPart) {
+            try {
+
+                // Retrieve headers, read the Content-Disposition header to obtain the original name of the file
+                MultivaluedMap<String, String> headers = inputPart.getHeaders();
+                String fileName = parseFileName(headers);
+
+                // Handle the body of that part with an InputStream
+                InputStream istream = inputPart.getBody(InputStream.class, null);
+
+                // fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+                fileName = "C:\\Users\\Jony Lucena\\" + fileName;
+
+                saveFile(istream, fileName);
+                imatges.add(fileName);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return imatges;
+    }
+
+    // Parse Content-Disposition header to get the original file name
+    private String parseFileName(MultivaluedMap<String, String> headers) {
+
+        String[] contentDispositionHeader = headers.getFirst("Content-Disposition").split(";");
+
+        for (String name : contentDispositionHeader) {
+            if ((name.trim().startsWith("filename"))) {
+                String[] tmp = name.split("=");
+                String fileName = tmp[1].trim().replaceAll("\"","");
+
+                return fileName;
+            }
+        }
+        return "randomName";
+    }
+
+    // save uploaded file to a defined location on the server
+    private void saveFile(InputStream uploadedInputStream,
+                          String serverLocation) throws IOException {
+
+        int read;
+        byte[] bytes = new byte[1024];
+
+        OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
+        while ((read = uploadedInputStream.read(bytes)) != -1) {
+            outpuStream.write(bytes, 0, read);
+        }
+        outpuStream.flush();
+        outpuStream.close();
+    }
 }

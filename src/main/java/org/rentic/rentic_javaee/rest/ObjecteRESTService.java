@@ -1,30 +1,28 @@
 package org.rentic.rentic_javaee.rest;
 
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-import javafx.util.Pair;
-import org.rentic.rentic_javaee.model.Coordenades;
-import org.rentic.rentic_javaee.model.Disponibilitat;
-import org.rentic.rentic_javaee.model.Objecte;
-import org.rentic.rentic_javaee.service.ObjecteService;
+import org.rentic.rentic_javaee.model.*;
+import org.rentic.rentic_javaee.service.*;
 import org.rentic.rentic_javaee.util.ToJSON;
 
+import java.io.IOException;
+import java.lang.*;
+
+import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+
 
 @Path("/objectes")
 @RequestScoped
@@ -33,61 +31,136 @@ public class ObjecteRESTService {
     @EJB
     ObjecteService objecteService;
 
+
     @Inject
     ToJSON toJSON;
 
-    public static class objecte {
-        public String nom;
-        public String descripcio;
-        public float preu;
-        public List<String> tags;
-        public float latitud;
-        public float longitud;
-        public List<Pair<String,String>> dispRang;
-        public Boolean dispCapDeSetmana;
-        public Boolean dispEntreDeSetmana;
+
+    public String Answer(String code, String data) {
+        return "{\"code\":" + code + ", \"message\":" + null + ", \"data\":" + data + "}";
     }
 
-    public String Answer(String code, String data){
-        return "{\"code\":"+code+", \"message\":"+null+", \"data\":"+data+"}" ;
-    }
 
-    @POST
+    @GET
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String obtenir(@Context HttpServletRequest req, @Context HttpServletResponse response, objecte i) throws Exception {
+    public String getObjecte(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
 
         HttpSession session = req.getSession();
 
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","Sessions not supported!");
+            return Error.build("500", "Sessions not supported!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+
+        if (userId == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "User not authenticated!");
+        }
+
+        try {
+            Objecte o = objecteService.getObjecte(id);
+            // Check that the user authenticated in the session owns the object it is trying to access
+            if (o.getUser().getId() != userId) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "You don't own this task!");
+            }
+            return Answer("200", toJSON.Object(o));
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", ex.getMessage());
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listAllObjectes(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response) throws IOException {
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Sessions not supported!");
+        }
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        if (userId == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "User not authenticated!");
+        }
+
+        try {
+            final ObjecteService.ObjectList results = objecteService.getObjectes(userId);
+            return Answer("200", toJSON.Object(results));
+        } catch (EJBException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Exception at ObjecteService: " + ex.getMessage());
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", ex.getMessage());
+        }
+    }
+
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String addObject(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            MultipartFormDataInput input) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Sessions not supported!");
         }
 
         if (session.getAttribute("rentic_auth_id") == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","You are not authenticated!");
+            return Error.build("500", "You are not authenticated!");
         }
 
-        Long userId = (Long) session.getAttribute("simpleapp_auth_id");
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        String objecte = formParts.get("objecte").get(0).getBodyAsString();
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        Objecte o = new Objecte();
+        List<InputPart> inPart = formParts.get("file");
 
-        Objecte o = objecteService.addObjecte(i, userId);
+        try {
+            o = objecteService.addObjecte(objecte, userId, inPart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        if (o!=null) {
+        if (o != null) {
             try {
                 return Answer("200", toJSON.Object(o));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500",ex.getMessage());
+                return Error.build("500", ex.getMessage());
             }
-        }else {
+        } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "No s'ha inserit be l'objecte");
+            return Error.build("500", "Error guardant imatge");
         }
-
     }
 }

@@ -1,23 +1,16 @@
 package org.rentic.rentic_javaee.rest;
 
 import java.io.IOException;
-
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
-
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.json.Json;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBContext;
-import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -81,7 +74,7 @@ public class UserRESTService {
                     // to identify the user in the next calls
                     session.setAttribute("rentic_auth_id", u.getId());
 
-                    return Answer("200", toJSON.User(u));
+                    return Answer("200", toJSON.Object(u));
 
                 } catch (Exception ex) {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -163,7 +156,7 @@ public class UserRESTService {
             try {
                 session.setAttribute("rentic_auth_id", nu.getId());
 
-                return Answer("200", toJSON.User(nu));
+                return Answer("200", toJSON.Object(nu));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
@@ -182,7 +175,7 @@ public class UserRESTService {
     public String getUser(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
-            @PathParam("id") long id) throws IOException {
+            @PathParam("id") Long id) throws IOException {
 
         // Access to the HTTP session
         HttpSession session = req.getSession();
@@ -218,7 +211,7 @@ public class UserRESTService {
             return Error.build("500","You cannot access data fromm other users!");
         }
         try {
-            return Answer("200", toJSON.User(u));
+            return Answer("200", toJSON.Object(u));
         } catch (IOException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();

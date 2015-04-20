@@ -16,7 +16,6 @@ public class Task implements Serializable {
     // This tells JAXB that this field can be used as ID
     // Since XmlID can only be used on Strings, we need to use LongAdapter to transform Long <-> String
     @Id
-    // Don't forget to use the extra argument "strategy = GenerationType.IDENTITY" to get AUTO_INCREMENT
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

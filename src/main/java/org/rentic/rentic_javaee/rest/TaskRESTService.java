@@ -4,9 +4,7 @@ import java.lang.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.ejb.EJB;
-
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,8 +13,6 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-
 import org.rentic.rentic_javaee.model.Task;
 import org.rentic.rentic_javaee.service.TaskService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -54,7 +50,6 @@ public class TaskRESTService {
             if (t.getUser().getId() != userId) {
                 return Error.build("300","You don't own this task!");
             }
-            //return toJSON.Task(t);
             return toJSON.Object(t);
         } catch (Exception ex) {
             return Error.build("300",ex.getMessage());

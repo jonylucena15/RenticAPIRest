@@ -37,30 +37,15 @@ public class ToJSON {
         }
     }
 
-    public String User(User u) throws IOException {
-        StringWriter sw = new StringWriter();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(sw,u);
-
-        return sw.toString();
-
-    }
-
-    public String Task(Task u) throws IOException {
-        StringWriter sw = new StringWriter();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(sw, u);
-        return sw.toString();
-
-    }
-
-    public String Object(Object o) throws IOException {
+    public <T> String Object(T o) throws IOException {
         StringWriter sw = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(sw, o);
         return sw.toString();
 
     }
+
+
 
     public static Marshaller User;
 }

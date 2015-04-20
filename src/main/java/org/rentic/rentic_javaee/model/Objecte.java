@@ -3,45 +3,68 @@ package org.rentic.rentic_javaee.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 public class Objecte implements Serializable{
+
     /**
      * Default value included to remove warning. Remove or modify at will. *
      */
     private static final long serialVersionUID = 1L;
 
+
     @Id
+    @Column (name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @Column (name = "NOM")
     private String nom;
 
+    @Column(name = "DESCRIPCIO")
     private String descripcio;
 
-    private float preu;
+    @Column (name = "PREU")
+    private Number preu;
 
     @ElementCollection
+    @CollectionTable(
+            name="IMATGES",
+            joinColumns=@JoinColumn(name="IMATGE_ID")
+    )
+    @Column (name = "IMATGE")
+    private List<String> imatges;
+
+    @ElementCollection
+    @CollectionTable(
+            name="TAGS",
+            joinColumns=@JoinColumn(name="TAGS_ID")
+    )
+    @Column (name = "NOM_TAG")
     private List<String> tags;
 
+    @Column (name = "DISP_CAPS_DE_SETMANA")
     private Boolean dispCapDeSetmana;
 
+    @Column (name = "DISP_ENTRE_SETMANA")
     private Boolean dispEntreSetmana;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "objecte")
-    private Collection<Disponibilitat> dispRang;
+    @ElementCollection
+    @CollectionTable(
+            name="DISPONIBILITAT_RANGS",
+            joinColumns=@JoinColumn(name="DISP_RANGS_ID")
+    )
+    @Column (name = "DISP_RANGS")
+    private List<Disponibilitat> dispRangs;
 
-    @Column(name = "idCoordenades", insertable = false, updatable = false)
-    private Long idCoordenades;
+    @Column (name = "LONGITUD")
+    private Number longitud;
 
-    @OneToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name="idCoordenades", unique=true, nullable=false, updatable=false)
-    private Coordenades coordenades;
+    @Column (name = "LATITUD")
+    private Number latitud;
 
     @Column(name = "idUser", insertable = false, updatable = false)
     private Long userId;
@@ -73,11 +96,11 @@ public class Objecte implements Serializable{
         this.descripcio = descripcio;
     }
 
-    public float getPreu() {
+    public Number getPreu() {
         return preu;
     }
 
-    public void setPreu(float preu) {
+    public void setPreu(Number preu) {
         this.preu = preu;
     }
 
@@ -89,24 +112,14 @@ public class Objecte implements Serializable{
         this.tags = tags;
     }
 
-    public Collection<Disponibilitat> getDisponibilitats() {
-        dispRang.size();
-        return dispRang;
+    public List<Disponibilitat> getDispRangs() {  return dispRangs;
     }
 
-    public void setDisponibilitats(List<Disponibilitat> ts) {  this.dispRang = ts;   }
+    public void setDispRangs(List<Disponibilitat> ts) {  this.dispRangs = ts;   }
 
-    public void addDisponibilitat(Disponibilitat disponibilitat) {
-        dispRang.add(disponibilitat);
-    }
+    public void addDispRang(Disponibilitat disponibilitat) { dispRangs.add(disponibilitat);   }
 
-    public Coordenades getCoordenades() { return coordenades; }
-
-   public void setCoordenades(Coordenades ts) {  this.coordenades = ts; }
-
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user;  }
 
     public void setUser(User user) {
         this.user = user;
@@ -119,4 +132,18 @@ public class Objecte implements Serializable{
     public Boolean getDispEntreSetmana() {  return dispEntreSetmana;    }
 
     public void setDispEntreSetmana(Boolean dispEntreSetmana) {        this.dispEntreSetmana = dispEntreSetmana;    }
+
+    public List<String> getImatges() { return imatges;   }
+
+    public void setImatges(List<String> imatges) {  this.imatges = imatges; }
+
+        public Number getLongitud() { return longitud; }
+
+    public void setLongitud(Number longitud) { this.longitud = longitud; }
+
+    public Number getLatitud() {  return latitud;   }
+
+    public void setLatitud(Number latitud) { this.latitud = latitud; }
+
+
 }

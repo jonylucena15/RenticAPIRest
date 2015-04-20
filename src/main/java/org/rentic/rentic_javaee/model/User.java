@@ -43,8 +43,6 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Objecte> objectes;
 
-    public User getUser(){  return this; }
-
     public Long getId() { return id; }
 
     public void setId(Long id) {  this.id = id; }
@@ -84,12 +82,12 @@ public class User implements Serializable {
 
     public void addTask(Task task) { tasks.add(task);  }
 
-    public Collection<Objecte> getObjecte() {
+    public Collection<Objecte> getObjectes() {
         objectes.size();
         return objectes;
     }
 
-    public void setObjecte(List<Objecte> ts) {
+    public void setObjectes(List<Objecte> ts) {
         this.objectes = ts;
     }
 
