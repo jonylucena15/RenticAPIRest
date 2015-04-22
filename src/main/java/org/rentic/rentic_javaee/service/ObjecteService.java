@@ -45,11 +45,21 @@ public class ObjecteService {
         Objecte o= FromJSONObject.getObject(Objecte.class, i);
         o.setImatges(uploadImage(inPart));
         o.setUser(user);
-        user.addObjecte(o);
+        //user.addObjecte(o);
 
         em.persist(o);
 
+        return o;
+    }
 
+    public Objecte updateObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
+
+        Objecte o= FromJSONObject.getObject(Objecte.class, i);
+
+        em.detach(o);
+        o.setImatges(uploadImage(inPart));
+
+        em.merge(o);
 
         return o;
     }
@@ -74,10 +84,12 @@ public class ObjecteService {
 
     public  Boolean deleteObjecte(Long id, Long userID) throws Exception {
         Objecte o= em.find(Objecte.class, id);
-        if (o.getUser().getId()==userID){
-            em.remove(o);
-            return true;
+        if(o!=null) {
+            if (o.getUser().getId() == userID) {
+                em.remove(o);
+                return true;
 
+            }
         }
         return false;
     }

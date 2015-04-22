@@ -201,7 +201,7 @@ public class ObjecteRESTService {
             if ( !objecteService.deleteObjecte(id, userId)) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", "No pots eliminar aquet objecte, no ets el propietari");
+                return Error.build("500", "You aren't the owner of this object, or object not exist");
             }
             return Answer("200", "{}");
         } catch (Exception ex) {
@@ -214,7 +214,7 @@ public class ObjecteRESTService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String ModifyObject(
+    public String UpdateObject(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
             MultipartFormDataInput input) throws IOException {
@@ -240,7 +240,7 @@ public class ObjecteRESTService {
         List<InputPart> inPart = formParts.get("file");
 
         try {
-            o = objecteService.addObjecte(objecte, userId, inPart);
+            o = objecteService.updateObjecte(objecte, userId, inPart);
         } catch (Exception e) {
             e.printStackTrace();
         }
