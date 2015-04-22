@@ -43,8 +43,6 @@ public class UserService {
             usuari.setPassword(nu.password);
             usuari.setNomComplet(nu.nomComplet);
 
-
-
             em.persist(usuari);
 
             return usuari;

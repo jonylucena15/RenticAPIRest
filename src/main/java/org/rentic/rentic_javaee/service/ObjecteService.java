@@ -29,15 +29,6 @@ public class ObjecteService {
     @PersistenceContext
     private EntityManager em;
 
-
-
-
-    @XmlRootElement(name="collection")
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public class ObjectList {
-        public Collection<Objecte> objectes;
-    }
-
     public Objecte addObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
 
         User user = em.find(User.class, userId);
@@ -45,7 +36,7 @@ public class ObjecteService {
         Objecte o= FromJSONObject.getObject(Objecte.class, i);
         o.setImatges(uploadImage(inPart));
         o.setUser(user);
-        //user.addObjecte(o);
+        user.addObjecte(o);
 
         em.persist(o);
 
@@ -64,20 +55,6 @@ public class ObjecteService {
         return o;
     }
 
-    public ObjectList getObjectes(Long id) {
-        ObjectList o = new ObjectList();
-        try {
-            User u = em.find(User.class, id);
-            o.objectes = u.getObjectes();
-            return o;
-        }
-        catch (Exception ex) {
-            // Very important: if you want that an exception reaches the EJB caller, you have to throw an EJBException
-            // We catch the normal exception and then transform it in a EJBException
-            throw new EJBException(ex.getMessage());
-        }
-    }
-
     public  Objecte getObjecte(Long id) throws Exception {
         return em.find(Objecte.class, id);
     }
@@ -88,7 +65,6 @@ public class ObjecteService {
             if (o.getUser().getId() == userID) {
                 em.remove(o);
                 return true;
-
             }
         }
         return false;
