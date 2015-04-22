@@ -82,27 +82,28 @@ public class ObjecteService {
         return false;
     }
 
-    public ObjectList getObjectes(Long idUser, int limit, List<String> orderBy, Double latitud, Double longitud) {
-        ObjectList o = new ObjectList();
+    public List<Objecte> getObjectes(Long idUser, int limit, List<String> orderBy, Double latitud, Double longitud) {
+        List <Objecte> o = new ArrayList<Objecte>();
+
         Query q=null;
-
-        if (idUser!=null){
-            /*if(orderBy!=null){
-                q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers" );
-                q.setParameter("orderby",orderBy[0]);
-            }else
-             */
-            q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers");
-            q.setParameter("idUsers",idUser);
-        }else{
-            q = em.createQuery("select obj from  Objecte obj");
-        }
-        if(limit!=0) {q.setMaxResults(limit);}
-
         try {
+            if (idUser!=null){
+                q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers");
+                q.setParameter("idUsers",idUser);
+            }else{
+                q = em.createQuery("select obj from  Objecte obj");
+            }
+
             List<Objecte> obj=q.getResultList();
-            Collections.sort(obj, new DistanceComparator(latitud,longitud));
-            o.objectes = obj;
+            if(orderBy.get(0).equals("distancia")){
+                Collections.sort(obj, new DistanceComparator(latitud, longitud));
+            }
+            if(limit!=0) {
+                for (int i=0; i<limit&&i<obj.size();i++){
+                    o.add(obj.get(i));
+                }
+            }else
+                o= obj;
 
             return o;
         }
@@ -126,8 +127,8 @@ public class ObjecteService {
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                // fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
-                fileName = "C:\\Users\\Jony Lucena\\" + fileName;
+                fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+                //fileName = "C:\\Users\\Jony Lucena\\" + fileName;
 
                 saveFile(istream, fileName);
                 imatges.add(fileName);

@@ -109,7 +109,7 @@ public class ObjecteRESTService {
         }
 
         try {
-            final ObjecteService.ObjectList results = objecteService.getObjectes(idUser,limit,orderBy, latitud, longitud);
+            List<Objecte> results = objecteService.getObjectes(idUser,limit,orderBy, latitud, longitud);
             return Answer("200", toJSON.Object(results));
         } catch (EJBException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -208,6 +208,55 @@ public class ObjecteRESTService {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
             return Error.build("500", ex.getMessage());
+        }
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String ModifyObject(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            MultipartFormDataInput input) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Sessions not supported!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "You are not authenticated!");
+        }
+
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        String objecte = formParts.get("objecte").get(0).getBodyAsString();
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        Objecte o = new Objecte();
+        List<InputPart> inPart = formParts.get("file");
+
+        try {
+            o = objecteService.addObjecte(objecte, userId, inPart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (o != null) {
+            try {
+                return Answer("200", toJSON.Object(o));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", ex.getMessage());
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error guardant imatge");
         }
     }
 }
