@@ -6,8 +6,6 @@
 package org.rentic.rentic_javaee.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.rentic.rentic_javaee.model.Task;
-import org.rentic.rentic_javaee.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

@@ -89,7 +89,7 @@ public class ObjecteRESTService {
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
             @QueryParam("limit") int limit,
-            @QueryParam("user") Long idUser,
+            @QueryParam("idUsuari") Long idUser,
             @QueryParam("latitud")  Double latitud,
             @QueryParam("longitud") Double longitud,
             @QueryParam("orderBy") List<String> orderBy) throws IOException {

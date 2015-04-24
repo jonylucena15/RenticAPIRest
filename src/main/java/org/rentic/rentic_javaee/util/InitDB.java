@@ -5,16 +5,16 @@
  */
 package org.rentic.rentic_javaee.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.rentic.rentic_javaee.model.User;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.rentic.rentic_javaee.model.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 @Startup
