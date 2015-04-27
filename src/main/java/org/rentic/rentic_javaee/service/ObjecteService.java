@@ -3,6 +3,7 @@ package org.rentic.rentic_javaee.service;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.model.User;
+import org.rentic.rentic_javaee.util.DistanceComparator;
 import org.rentic.rentic_javaee.util.FromJSONObject;
 
 import javax.ejb.EJBException;
@@ -110,11 +111,11 @@ public class ObjecteService {
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+                String serverFileName = System.getenv("OPENSHIFT_IMAGE_DIR") + fileName;
                 //fileName = "C:\\Users\\Jony Lucena\\" + fileName;
 
-                saveFile(istream, fileName);
-                imatges.add(fileName);
+                saveFile(istream, serverFileName);
+                imatges.add("http://rentic-rentic.rhcloud.com/images/"+fileName);
             } catch (Exception e) {
                 return null;
             }

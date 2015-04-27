@@ -1,4 +1,4 @@
-package org.rentic.rentic_javaee.service;
+package org.rentic.rentic_javaee.util;
 
 import org.rentic.rentic_javaee.model.Objecte;
 
@@ -12,7 +12,7 @@ public class DistanceComparator implements Comparator<Objecte>  {
     Double latitud;
     Double longitud;
 
-    DistanceComparator(Double latitud, Double longitud){
+    public DistanceComparator(Double latitud, Double longitud){
         this.latitud=latitud;
         this.longitud=longitud;
     }
