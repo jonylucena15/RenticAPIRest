@@ -9,13 +9,11 @@ import org.json.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +21,19 @@ import java.util.Map;
 @Path("/images")
 @RequestScoped
 public class ImageRESTService {
+
+    @GET
+    @Path("{id}")
+    @Produces("image/png")
+    public Response getFile(
+            @PathParam("id") String id) {
+
+        File file = new File(System.getenv("OPENSHIFT_DATA_DIR") + id);
+
+        Response.ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition", "attachment; filename="+id);
+        return response.build();
+    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

@@ -25,6 +25,8 @@ public class ObjecteService {
     @PersistenceContext
     private EntityManager em;
 
+    private static final String FILE_PATH = "http://rentic-rentic.rhcloud.com/rest/images/";
+
     public Objecte addObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
 
         User user = em.find(User.class, userId);
@@ -111,11 +113,10 @@ public class ObjecteService {
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                String serverFileName = "/var/lib/openshift/5533db78e0b8cd7d7a000002/app-root/runtime/repo/src/main/webbapp/images/" + fileName;
-                //fileName = "C:\\Users\\Jony Lucena\\" + fileName;
+                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
 
                 saveFile(istream, serverFileName);
-                imatges.add("http://rentic-rentic.rhcloud.com/images/"+fileName);
+                imatges.add(FILE_PATH+fileName);
             } catch (Exception e) {
                 return null;
             }
