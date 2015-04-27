@@ -111,7 +111,7 @@ public class ObjecteService {
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                String serverFileName = System.getenv("OPENSHIFT_IMAGE_DIR") + fileName;
+                String serverFileName = "/var/lib/openshift/5533db78e0b8cd7d7a000002/app-root/runtime/repo/src/main/webbapp/images/" + fileName;
                 //fileName = "C:\\Users\\Jony Lucena\\" + fileName;
 
                 saveFile(istream, serverFileName);
