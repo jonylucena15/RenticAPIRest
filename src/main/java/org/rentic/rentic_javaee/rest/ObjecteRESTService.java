@@ -1,21 +1,27 @@
 package org.rentic.rentic_javaee.rest;
 
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataReader;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartInputImpl;
 import org.rentic.rentic_javaee.model.*;
 import org.rentic.rentic_javaee.service.*;
 import org.rentic.rentic_javaee.util.ToJSON;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -128,7 +134,8 @@ public class ObjecteRESTService {
     public String addObject(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
-            MultipartFormDataInput input) throws IOException {
+            MultipartFormDataInput input
+    ) throws IOException, ServletException {
 
         HttpSession session = req.getSession();
 
@@ -144,14 +151,11 @@ public class ObjecteRESTService {
             return Error.build("500", "You are not authenticated!");
         }
 
-        Map<String, List<InputPart>> formParts = input.getFormDataMap();
-        String objecte = formParts.get("objecte").get(0).getBodyAsString();
         Long userId = (Long) session.getAttribute("rentic_auth_id");
         Objecte o = new Objecte();
-        List<InputPart> inPart = formParts.get("file");
 
         try {
-            o = objecteService.addObjecte(objecte, userId, inPart);
+            o = objecteService.addObjecte(input, userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,14 +237,14 @@ public class ObjecteRESTService {
             return Error.build("500", "You are not authenticated!");
         }
 
-        Map<String, List<InputPart>> formParts = input.getFormDataMap();
-        String objecte = formParts.get("objecte").get(0).getBodyAsString();
+
         Long userId = (Long) session.getAttribute("rentic_auth_id");
         Objecte o = new Objecte();
-        List<InputPart> inPart = formParts.get("file");
+
 
         try {
-            o = objecteService.updateObjecte(objecte, userId, inPart);
+            o = objecteService.updateObjecte(input, userId);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -254,9 +258,9 @@ public class ObjecteRESTService {
                 return Error.build("500", ex.getMessage());
             }
         } else {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.flushBuffer();
-            return Error.build("500", "Error guardant imatge");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "You aren't the owner of this object, or object not exist");
         }
     }
 }

@@ -1,6 +1,8 @@
 package org.rentic.rentic_javaee.service;
 
+import org.apache.james.mime4j.field.datetime.DateTime;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.util.DistanceComparator;
@@ -12,11 +14,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -25,32 +27,74 @@ public class ObjecteService {
     @PersistenceContext
     private EntityManager em;
 
-    private static final String FILE_PATH = "http://rentic-rentic.rhcloud.com/rest/images/";
+    //private static final String FILE_PATH = "http://rentic-rentic.rhcloud.com/rest/images/";
+    private static final String FILE_PATH = "http://localhost:8080/rest/images/";
 
-    public Objecte addObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
+    public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {
+
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        String objecte = formParts.get("objecte").get(0).getBodyAsString();
+
+        Boolean fi=false;
+        int i=0;
+        List<InputPart> inPart=new ArrayList<InputPart>();
+        while (!fi) {
+            String file="file"+i;
+            List<InputPart> imatge = formParts.get(file);
+            if (imatge!=null) {
+                inPart.add(imatge.get(0));
+                i++;
+            } else
+                fi=true;
+        }
 
         User user = em.find(User.class, userId);
 
-        Objecte o= FromJSONObject.getObject(Objecte.class, i);
-        o.setImatges(uploadImage(inPart));
+        Objecte o= FromJSONObject.getObject(Objecte.class, objecte);
         o.setUser(user);
+        if(!inPart.isEmpty())
+            o.setImatges(uploadImage(inPart,o.getNom()));
+
+
         user.addObjecte(o);
 
         em.persist(o);
 
+
         return o;
     }
 
-    public Objecte updateObjecte(String i, Long userId,List<InputPart> inPart) throws Exception {
+    public Objecte updateObjecte(MultipartFormDataInput input, Long userId) throws Exception {
 
-        Objecte o= FromJSONObject.getObject(Objecte.class, i);
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        String objecte = formParts.get("objecte").get(0).getBodyAsString();
 
-        em.detach(o);
-        o.setImatges(uploadImage(inPart));
+        Boolean fi=false;
+        int i=0;
+        List<InputPart> inPart=new ArrayList<InputPart>();
+        while (!fi) {
+            String file="file"+i;
+            List<InputPart> imatge = formParts.get(file);
+            if (imatge!=null) {
+                inPart.add(imatge.get(0));
+                i++;
+            } else
+                fi=true;
+        }
 
-        em.merge(o);
+        Objecte o= FromJSONObject.getObject(Objecte.class, objecte);
+        Objecte aux= em.find(Objecte.class, o.getId());
 
-        return o;
+        if(aux.getUser().getId()==userId) {
+            em.detach(o);
+            if (!inPart.isEmpty())
+                o.setImatges(uploadImage(inPart, o.getNom()));
+            em.merge(o);
+
+            return o;
+        }else
+            return null;
+
     }
 
     public  Objecte getObjecte(Long id) throws Exception {
@@ -100,15 +144,14 @@ public class ObjecteService {
         }
     }
 
-    public List<String> uploadImage(List<InputPart> inPart) {
+    public List<String> uploadImage(List<InputPart> inPart, String nom) {
 
         List<String> imatges= new ArrayList<String>();
+        int i=0;
         for (InputPart inputPart : inPart) {
             try {
 
-                // Retrieve headers, read the Content-Disposition header to obtain the original name of the file
-                MultivaluedMap<String, String> headers = inputPart.getHeaders();
-                String fileName = parseFileName(headers);
+                String fileName = "imatgeObjecte"+i+"_"+nom+"_"+Math.random()+".jpg";
 
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
@@ -120,24 +163,9 @@ public class ObjecteService {
             } catch (Exception e) {
                 return null;
             }
+            i++;
         }
         return imatges;
-    }
-
-    // Parse Content-Disposition header to get the original file name
-    private String parseFileName(MultivaluedMap<String, String> headers) {
-
-        String[] contentDispositionHeader = headers.getFirst("Content-Disposition").split(";");
-
-        for (String name : contentDispositionHeader) {
-            if ((name.trim().startsWith("filename"))) {
-                String[] tmp = name.split("=");
-                String fileName = tmp[1].trim().replaceAll("\"","");
-
-                return fileName;
-            }
-        }
-        return "randomName";
     }
 
     // save uploaded file to a defined location on the server
