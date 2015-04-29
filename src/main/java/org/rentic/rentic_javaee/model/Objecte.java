@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -77,6 +78,10 @@ public class Objecte implements Serializable{
     @JsonIgnore
     private User user;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
+    @JsonIgnore
+    private Collection<Lloguer> lloguers;
+
     public Long getId() {  return id;  }
 
     public void setId(Long id) {
@@ -147,6 +152,16 @@ public class Objecte implements Serializable{
     public Number getLatitud() {  return latitud;   }
 
     public void setLatitud(Number latitud) { this.latitud = latitud; }
+    public Collection<Lloguer> getLloguers() {
+        lloguers.size();
+        return lloguers;
+    }
+
+    public void setLloguers(List<Lloguer> ts) {
+        this.lloguers = ts;
+    }
+
+    public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
 
 
 }

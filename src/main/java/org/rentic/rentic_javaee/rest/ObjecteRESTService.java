@@ -1,22 +1,10 @@
 package org.rentic.rentic_javaee.rest;
 
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataReader;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInputImpl;
-import org.rentic.rentic_javaee.model.*;
-import org.rentic.rentic_javaee.service.*;
+import org.rentic.rentic_javaee.model.Objecte;
+import org.rentic.rentic_javaee.service.ObjecteService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
@@ -28,8 +16,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.util.List;
 
 
 @Path("/objectes")

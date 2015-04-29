@@ -3,9 +3,9 @@ package org.rentic.rentic_javaee.rest;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.json.JSONObject;
 
 import javax.enterprise.context.RequestScoped;
-import org.json.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

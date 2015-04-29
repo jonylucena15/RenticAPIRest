@@ -46,6 +46,10 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Objecte> objectes;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Collection<Lloguer> lloguers;
+
     public Long getId() { return id; }
 
     public void setId(Long id) {  this.id = id; }
@@ -84,4 +88,17 @@ public class User implements Serializable {
     }
 
     public void addObjecte(Objecte objecte) {  objectes.add(objecte); }
+
+    public Collection<Lloguer> getLloguers() {
+        lloguers.size();
+        return lloguers;
+    }
+
+    public void setLloguers(List<Lloguer> ts) {
+        this.lloguers = ts;
+    }
+
+    public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
+
+
 }

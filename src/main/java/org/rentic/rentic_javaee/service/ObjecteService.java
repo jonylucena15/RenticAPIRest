@@ -1,6 +1,5 @@
 package org.rentic.rentic_javaee.service;
 
-import org.apache.james.mime4j.field.datetime.DateTime;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.Objecte;
@@ -27,8 +26,8 @@ public class ObjecteService {
     @PersistenceContext
     private EntityManager em;
 
-    //private static final String FILE_PATH = "http://rentic-rentic.rhcloud.com/rest/images/";
-    private static final String FILE_PATH = "http://localhost:8080/rest/images/";
+    private static final String FILE_PATH = "http://rentic-rentic.rhcloud.com/rest/images/";
+    //private static final String FILE_PATH = "http://localhost:8080/rest/images/";
 
     public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {
 

@@ -1,11 +1,9 @@
 package org.rentic.rentic_javaee.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.lang.String;
 @Embeddable
 public class Disponibilitat implements Serializable {
     /**
