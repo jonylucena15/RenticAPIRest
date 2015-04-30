@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -78,9 +79,26 @@ public class Objecte implements Serializable{
     @JsonIgnore
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
-    @JsonIgnore
+    @OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "objecte")
+    //@JsonIgnore
     private Collection<Lloguer> lloguers;
+
+    public Objecte(){
+
+        nom="";
+        descripcio="";
+        preu=null;
+        imatges=new ArrayList<String>();
+        tags=new ArrayList<String>();
+        dispCapDeSetmana=false;
+        dispEntreSetmana=false;
+        dispRangs=new ArrayList<Disponibilitat>();
+        longitud=null;
+        latitud=null;
+        userId=null;
+        user=null;
+        lloguers=new ArrayList<Lloguer>();
+    }
 
     public Long getId() {  return id;  }
 
@@ -145,13 +163,14 @@ public class Objecte implements Serializable{
 
     public void setImatges(List<String> imatges) {  this.imatges = imatges; }
 
-        public Number getLongitud() { return longitud; }
+    public Number getLongitud() { return longitud; }
 
     public void setLongitud(Number longitud) { this.longitud = longitud; }
 
     public Number getLatitud() {  return latitud;   }
 
     public void setLatitud(Number latitud) { this.latitud = latitud; }
+
     public Collection<Lloguer> getLloguers() {
         lloguers.size();
         return lloguers;
@@ -162,6 +181,5 @@ public class Objecte implements Serializable{
     }
 
     public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
-
 
 }

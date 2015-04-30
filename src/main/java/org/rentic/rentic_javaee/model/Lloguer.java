@@ -27,7 +27,7 @@ public class Lloguer implements Serializable {
     private String dataInici;
 
     @Column(name = "DATA_FI")
-    private Number dataFi;
+    private String dataFi;
 
     @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
@@ -55,9 +55,9 @@ public class Lloguer implements Serializable {
 
     public void setDataInici(String dataInici) { this.dataInici = dataInici; }
 
-    public Number getDataFi() { return dataFi; }
+    public String getDataFi() { return dataFi; }
 
-    public void setDataFi(Number dataFi) { this.dataFi = dataFi; }
+    public void setDataFi(String dataFi) { this.dataFi = dataFi; }
 
     public User getUser() { return user;  }
 

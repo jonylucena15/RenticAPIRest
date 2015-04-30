@@ -1,6 +1,7 @@
 package org.rentic.rentic_javaee.util;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,14 +14,28 @@ import java.util.Date;
  */
 public class DateAdapter extends XmlAdapter<String, Date> {
 
-    // the desired format
-    private String pattern = "yyyy-MM-dd HH:mm:ss z";
-
     public String marshal(Date date) throws Exception {
-        return new SimpleDateFormat(pattern).format(date);
+        SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
+        return formate.format(date);
     }
 
     public Date unmarshal(String dateString) throws Exception {
-        return new SimpleDateFormat(pattern).parse(dateString);
+        SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
+
+        return  formate.parse(dateString);
+    }
+
+    public String compararDate(String data1, String dataActual) throws Exception{
+        DateAdapter d = new DateAdapter();
+        String resultat="";
+        java.util.Date dataDate1 = d.unmarshal(data1);
+        java.util.Date dataDate2 = d.unmarshal(dataActual);
+
+        if ( dataDate1.before(dataDate2) )
+            resultat=data1;
+        else
+            resultat=dataActual;
+
+        return resultat;
     }
 }

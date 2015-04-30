@@ -1,6 +1,7 @@
 package org.rentic.rentic_javaee.rest;
 
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.rentic.rentic_javaee.model.Lloguer;
 import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.service.ObjecteService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -34,6 +35,11 @@ public class ObjecteRESTService {
 
     public String Answer(String code, String data) {
         return "{\"code\":" + code + ", \"message\":" + null + ", \"data\":" + data + "}";
+    }
+
+    public static class lloguer {
+        public String dataInici;
+        public String dataFi;
     }
 
 
@@ -251,4 +257,51 @@ public class ObjecteRESTService {
                 return Error.build("500", "You aren't the owner of this object, or object not exist");
         }
     }
+    @POST
+    @Path("{id}"+"/lloguer")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addlloguer(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long idObjecte ,
+            lloguer ll ) throws IOException, ServletException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Sessions not supported!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "You are not authenticated!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        Lloguer llog = new Lloguer();
+
+        try {
+            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (llog != null) {
+            try {
+                return Answer("200", toJSON.Object(llog));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", ex.getMessage());
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error guardant imatge");
+        }
+    }
+
 }
