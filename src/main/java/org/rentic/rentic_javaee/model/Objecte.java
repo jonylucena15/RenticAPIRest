@@ -76,7 +76,6 @@ public class Objecte implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "USUARI_ID", nullable=false)
-    @JsonIgnore
     private User user;
 
     @OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "objecte")

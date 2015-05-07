@@ -83,12 +83,14 @@ public class ObjecteService {
         }
 
         Objecte o= FromJSONObject.getObject(Objecte.class, objecte);
-        Objecte aux= em.find(Objecte.class, o.getId());
 
+        Objecte aux= em.find(Objecte.class, o.getId());
+        User u=aux.getUser();
         if(aux.getUser().getId()==userId) {
             em.detach(o);
             if (!inPart.isEmpty())
                 o.setImatges(uploadImage(inPart));
+            o.setUser(u);
             em.merge(o);
 
             return o;
