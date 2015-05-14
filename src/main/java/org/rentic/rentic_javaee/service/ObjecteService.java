@@ -142,7 +142,8 @@ public class ObjecteService {
                     List<Disponibilitat> disp = obj.get(i).getDispRangs();
                     int nx = 0;
                     while (!compleix && nx < disp.size()) {
-                        compleix = !(d.compararDate(disp.get(nx).getDataFi(), dSistema).equals(disp.get(nx).getDataFi()));
+
+                        compleix =disp.get(nx).getDataFi().equals(dSistema) || !(d.compararDate(disp.get(nx).getDataFi(), dSistema).equals(disp.get(nx).getDataFi()));
                         nx++;
                     }
                 }
@@ -152,7 +153,7 @@ public class ObjecteService {
 
                     List<Lloguer> aux = new ArrayList<Lloguer>();
                     for (int j = 0; j < l.size(); j++) {
-                        if (d.compararDate(l.get(j).getDataFi(), dSistema).equals(l.get(j).getDataFi()))
+                        if (l.get(j).getDataFi().equals(dSistema) || !d.compararDate(l.get(j).getDataFi(), dSistema).equals(l.get(j).getDataFi()))
                             aux.add(l.get(j));
                     }
                     obj.get(i).setLloguers(aux);
