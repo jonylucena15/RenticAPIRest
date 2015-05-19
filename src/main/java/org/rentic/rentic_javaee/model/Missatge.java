@@ -52,7 +52,6 @@ public class Missatge implements Serializable {
     @JsonIgnore
     private User user;
 
-
     public String getMissatge() { return missatge; }
 
     public void setMissatge(String missatge) { this.missatge = missatge; }

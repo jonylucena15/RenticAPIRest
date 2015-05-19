@@ -49,7 +49,7 @@ public class ConversaService {
         Missatge missatge = new Missatge();
         missatge.setUser(user);
         missatge.setUserId(userId);
-        missatge.setMissatge("Un usuari vol llogar el teu objecte des del " + dataInici + " fins el " + dataFi);
+        missatge.setMissatge("Hola, vull llogar el teu objecte des del " + dataInici + " fins el " + dataFi);
         missatge.setEnviat(false);
         missatge.setDataHota(formate.format(data));
         missatge.setConversa(conversa);
@@ -58,8 +58,6 @@ public class ConversaService {
         em.persist(missatge);
         conversa.addMissatge(missatge);
         em.merge(conversa);
-
-
 
         return conversa;
     }

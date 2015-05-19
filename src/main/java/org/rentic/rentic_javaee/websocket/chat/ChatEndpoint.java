@@ -23,22 +23,6 @@ import javax.websocket.server.ServerEndpoint;
 /**
  * Created by Jony Lucena on 13/05/2015.
  */
-/*
-@ServerEndpoint("/chat")
-public class ChatEndpoint {
-    @OnMessage
-    public void message(String message, Session client) throws IOException, EncodeException {
-
-        System.out.println("message: " + message);
-        for (Session peer : client.getOpenSessions()) {
-            System.out.println(peer.getBasicRemote().toString());
-            peer.getBasicRemote().sendText(message);
-        }
-    }
-
-}
-*/
-
 
 
 @ServerEndpoint(value="/chat/{chat-id}")

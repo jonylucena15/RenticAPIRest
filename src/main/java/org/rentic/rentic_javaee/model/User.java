@@ -54,6 +54,11 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Conversa> converses;
 
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Collection<Missatge> missatges;
+
     public Long getId() { return id; }
 
     public void setId(Long id) {  this.id = id; }
@@ -114,6 +119,12 @@ public class User implements Serializable {
     }
 
     public void addConversa(Conversa conversa) {  converses.add(conversa); }
+
+    public Collection<Missatge> getMissatges() {  return missatges; }
+
+    public void setMissatges(Collection<Missatge> missatges) { this.missatges = missatges;  }
+
+    public void addMissatge(Missatge missatge) {  missatges.add(missatge); }
 
 
 
