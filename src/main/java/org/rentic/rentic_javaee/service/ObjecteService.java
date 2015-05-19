@@ -55,11 +55,9 @@ public class ObjecteService {
         if(!inPart.isEmpty())
             o.setImatges(uploadImage(inPart));
 
-
         user.addObjecte(o);
 
         em.persist(o);
-
 
         return o;
     }
@@ -195,7 +193,6 @@ public class ObjecteService {
         objecte.addLloguer(llog);
 
         em.persist(llog);
-
 
         return llog;
     }

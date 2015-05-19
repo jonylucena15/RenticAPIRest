@@ -82,6 +82,10 @@ public class Objecte implements Serializable{
     //@JsonIgnore
     private Collection<Lloguer> lloguers;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
+    @JsonIgnore
+    private Collection<Conversa> converses;
+
     public Objecte(){
 
         nom="";
@@ -97,6 +101,7 @@ public class Objecte implements Serializable{
         userId=null;
         user=null;
         lloguers=new ArrayList<Lloguer>();
+        converses=new ArrayList<Conversa>();
     }
 
     public Long getId() {  return id;  }
@@ -150,6 +155,7 @@ public class Objecte implements Serializable{
         this.user = user;
     }
 
+
     public Boolean getDispCapDeSetmana() { return dispCapDeSetmana;    }
 
     public void setDispCapDeSetmana(Boolean dispCapDeSetmana) {   this.dispCapDeSetmana = dispCapDeSetmana;    }
@@ -181,4 +187,15 @@ public class Objecte implements Serializable{
 
     public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
 
+
+    public Collection<Conversa> getConverses() {
+        converses.size();
+        return converses;
+    }
+
+    public void setConverses(List<Conversa> ts) {
+        this.converses = ts;
+    }
+
+    public void addConversa(Conversa conversa) {  converses.add(conversa); }
 }

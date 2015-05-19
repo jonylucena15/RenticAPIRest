@@ -50,6 +50,10 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Lloguer> lloguers;
 
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "usuaris")
+    @JsonIgnore
+    private Collection<Conversa> converses;
+
     public Long getId() { return id; }
 
     public void setId(Long id) {  this.id = id; }
@@ -99,6 +103,18 @@ public class User implements Serializable {
     }
 
     public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
+
+    public Collection<Conversa> getConverses() {
+        converses.size();
+        return converses;
+    }
+
+    public void setConverses(List<Conversa> ts) {
+        this.converses = ts;
+    }
+
+    public void addConversa(Conversa conversa) {  converses.add(conversa); }
+
 
 
 }
