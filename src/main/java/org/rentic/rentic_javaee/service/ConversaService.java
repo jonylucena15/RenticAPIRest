@@ -36,25 +36,22 @@ public class ConversaService {
         conversa.setObjectId(objecte.getId());
 
         em.persist(conversa);
-
-        em.detach(conversa);
-
+        user.addConversa(conversa);
+        user2.addConversa(conversa);
+        objecte.addConversa(conversa);
 
         Date data= new Date();
         SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 
         Missatge missatge = new Missatge();
         missatge.setUser(user);
-        missatge.setUserId(userId);
         missatge.setMissatge("Hola, vull llogar el teu objecte des del " + dataInici + " fins el " + dataFi);
         missatge.setEnviat(false);
         missatge.setDataHota(formate.format(data));
         missatge.setConversa(conversa);
-        missatge.setConversaId(conversa.getId());
 
         em.persist(missatge);
         conversa.addMissatge(missatge);
-        em.merge(conversa);
 
         return conversa;
 
@@ -70,7 +67,6 @@ public class ConversaService {
 
         Missatge missatge = new Missatge();
         missatge.setUser(user);
-        missatge.setUserId(userId);
         missatge.setMissatge(text);
         missatge.setEnviat(b);
         missatge.setDataHota(formate.format(data));
@@ -100,9 +96,8 @@ public class ConversaService {
     public void canviarEstatMissatges(List<Missatge> missatges) {
         for(int i=0; i<missatges.size();i++){
             Missatge m=em.find(Missatge.class,missatges.get(i).getUserId());
-            em.detach(m);
             m.setEnviat(true);
-            em.merge(m);
+            em.persist(m);
         }
     }
 }

@@ -43,11 +43,11 @@ public class Missatge implements Serializable {
     @Column(name = "Enviat")
     private Boolean enviat;
 
-    @Column(name = "USUARI_ID")
+    @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "USUARI")
+    @JoinColumn(name = "USUARI_ID",nullable = false)
     @JsonIgnore
     private User user;
 

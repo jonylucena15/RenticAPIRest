@@ -60,6 +60,7 @@ public class UserService {
     public Collection<Conversa> getChats(long id) {
 
         User u=em.find(User.class, id);
+        u.getConverses().size();
         return u.getConverses();
     }
 
