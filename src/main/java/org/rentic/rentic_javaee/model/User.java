@@ -50,7 +50,7 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Lloguer> lloguers;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonIgnore
     private Collection<Conversa> converses;
 

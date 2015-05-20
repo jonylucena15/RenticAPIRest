@@ -35,25 +35,24 @@ public class Conversa implements Serializable {
 
 
     @ManyToMany (cascade = CascadeType.ALL)
-    private Collection<User> user;
-
+    private Collection<User> users;
 
     public Conversa(){
         objectId=null;
         objecte=null;
         missatges=new ArrayList<Missatge>();
-        user=new ArrayList<User>();
+        users=new ArrayList<User>();
     }
 
     public Long getId() { return id; }
 
     public void setId(Long id) {  this.id = id; }
 
-    public Collection<User> getUsers() { return user; }
+    public Collection<User> getUsers() { return users; }
 
-    public void setUsers(Collection<User> users2) { this.user = users2; }
+    public void setUsers(Collection<User> users2) { this.users = users2; }
 
-    public void addUser(User u){user.add(u);}
+    public void addUser(User u){users.add(u);}
 
     public Objecte getObjecte() { return objecte;  }
 
