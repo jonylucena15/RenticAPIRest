@@ -49,7 +49,7 @@ public class Conversa implements Serializable {
 
     public void setId(Long id) {  this.id = id; }
 
-    public Collection<User> getUsuaris() { return user; }
+    public Collection<User> getUsers() { return user; }
 
     public void setUsers(Collection<User> users2) { this.user = users2; }
 
