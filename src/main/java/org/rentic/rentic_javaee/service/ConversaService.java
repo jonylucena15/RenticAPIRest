@@ -1,21 +1,19 @@
 package org.rentic.rentic_javaee.service;
 
-import org.apache.james.mime4j.field.datetime.DateTime;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.rentic.rentic_javaee.model.*;
-import org.rentic.rentic_javaee.util.DateAdapter;
-import org.rentic.rentic_javaee.util.DistanceComparator;
-import org.rentic.rentic_javaee.util.FromJSONObject;
+import org.rentic.rentic_javaee.model.Conversa;
+import org.rentic.rentic_javaee.model.Missatge;
+import org.rentic.rentic_javaee.model.Objecte;
+import org.rentic.rentic_javaee.model.User;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 @LocalBean
@@ -32,16 +30,15 @@ public class ConversaService {
         Objecte objecte = em.find(Objecte.class, idObjecte);
         User user2 = em.find(User.class, idArrendador);
 
-        Collection<User> usuaris = new ArrayList<>();
-        usuaris.add(user);
-        usuaris.add(user2);
-
+        conversa.addUser(user);
+        conversa.addUser(user2);
         conversa.setObjecte(objecte);
         conversa.setObjectId(objecte.getId());
-        conversa.setUsuaris(usuaris);
 
         em.persist(conversa);
+
         em.detach(conversa);
+
 
         Date data= new Date();
         SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
@@ -60,9 +57,10 @@ public class ConversaService {
         em.merge(conversa);
 
         return conversa;
+
     }
 
-    public void addMissatge(String chatId, Long userId, String text, boolean b) throws Exception {
+    public void addMissatge(Long chatId, Long userId, String text, boolean b) throws Exception {
 
         Conversa conversa= em.find(Conversa.class,chatId);
         User user = em.find(User.class, userId);
@@ -82,10 +80,29 @@ public class ConversaService {
         em.detach(conversa);
         conversa.addMissatge(missatge);
 
-
         em.merge(conversa);
 
     }
 
 
+    public Collection<Missatge> obtenirMissatgesNoEnviats(Long idUsers,Long chatId) {
+
+        Query q=null;
+        q = em.createQuery("select mis from  Missatge mis where mis.userId=:idUsers and mis.conversaId=:chatId and mis.enviat=FALSE");
+        q.setParameter("idUsers",idUsers);
+        q.setParameter("chatId", chatId);
+
+        List<Missatge> m=q.getResultList();
+
+        return m;
+    }
+
+    public void canviarEstatMissatges(List<Missatge> missatges) {
+        for(int i=0; i<missatges.size();i++){
+            Missatge m=em.find(Missatge.class,missatges.get(i).getUserId());
+            em.detach(m);
+            m.setEnviat(true);
+            em.merge(m);
+        }
+    }
 }

@@ -1,136 +1,134 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 80%;
-    background-color: #1f1f1f;
+    background-color:#FFFFFF;
+    font-size:10pt;
+    font-family:Arial;
+    margin:0;
+    padding:0;
+    color:#555555;
 }
 
-#wrapper {
-    width: 960px;
-    margin: auto;
-    text-align: left;
-    color: #d9d9d9;
+#page {
+    width:900px;
+    background-image:url(images/page.png);
+    margin:auto;
+    padding:auto;
 }
 
-p {
-    text-align: left;
+#header {
+    clear:both;
+    width:580px;
+    height:157px;
+    background-image:url(images/header.png);
+    padding-left:280px;
+    padding-top:70px;
+    padding-bottom:10px;
+    padding-right:40px;
 }
 
-.button {
-    display: inline;
-    color: #fff;
-    background-color: #f2791d;
-    padding: 8px;
-    margin: auto;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    box-shadow: none;
-    border: none;
+#sidebarnav {
+    margin-top:10px;
+    padding-bottom:10px;
 }
 
-.button:hover {
-    background-color: #ffb15e;
-}
-.button a, a:visited, a:hover, a:active {
-    color: #fff;
-    text-decoration: none;
-}
-
-#addDevice {
-    text-align: center;
-    width: 960px;
-    margin: auto;
-    margin-bottom: 10px;
-}
-
-#addDeviceForm {
-    text-align: left;
-    width: 400px;
-    margin: auto;
-    padding: 10px;
+#sidebarnav a {
+    width:260px;
+    display:block;
+    clear:both;
+    padding-left:15px;
+    padding-top:6px;
+    height:25px;
+    color:#FFFFFF;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:bold;
+    background-color:#287279;
+    margin-top:3px;
 }
 
-#addDeviceForm span {
-    display: block;
+
+#sidebarnav a:hover, #sidebarnav a.active {
+    background-color:#e9f1f1;
+    text-decoration:none;
+    color:#555555;
 }
 
-#content {
-    margin: auto;
-    width: 960px;
+.widget {
+    padding-left:15px;
+    padding-right:15px;
+    padding-bottom:15px;
 }
 
-.device {
-    width: 180px;
-    height: 110px;
-    margin: 10px;
-    padding: 16px;
-    color: #fff;
-    vertical-align: top;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    display: inline-block;
+#mainarea {
+    width:860px;
+    clear:both;
+    padding-left:40px;
 }
 
-.device.off {
-    background-color: #c8cccf;
+#contentarea {
+    width:520px;
+    padding-right:20px;
+    padding-bottom:20px;
+    float:left;
+    line-height:14pt;
 }
 
-.device span {
-    display: block;
+#sidebar {
+    float:left;
+    width:280px;
+    line-height:14pt;
+    color:#FFFFFF;
 }
 
-.deviceName {
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 12px;
+#footer {
+    width:900px;
+    clear:both;
+    height:61px;
+    padding-top:40px;
+    text-align:center;
+    line-height:14pt;
+    background-image:url(images/footer.png);
+    background-repeat:no-repeat;
+    color:#FFFFFF;
 }
 
-.removeDevice {
-    margin-top: 12px;
-    text-align: center;
+#footer a {
+    color:#FFFFFF;
 }
 
-.device.Appliance {
-    background-color: #5eb85e;
+h1, h1 a {
+    font-size:30pt;
+    color:#FFFFFF;
+    margin:0;
 }
 
-.device.Appliance a:hover {
-    color: #a1ed82;
+h2 {
+    font-size:15pt;
+    color:#333333;
+    padding-top:6px;
 }
 
-.device.Electronics {
-    background-color: #0f90d1;
+#sidebar h2 {
+    font-size:15pt;
+    padding-left:15px;
+    color:#FFFFFF;
+    padding-top:6px;
 }
 
-.device.Electronics a:hover {
-    color: #4badd1;
+.description {
+    font-size:20pt;
+    color:#FFFFFF;
+    margin-left:10px;
 }
 
-.device.Lights {
-    background-color: #c2a00c;
+a {
+    color:#555555;
+    text-decoration:none;
 }
 
-.device.Lights a:hover {
-    color: #fad232;
+#sidebar a {
+    color:#FFFFCC;
 }
 
-.device.Other {
-    background-color: #db524d;
-}
-
-.device.Other a:hover {
-    color: #ff907d;
-}
-
-.device a {
-    text-decoration: none;
-}
-
-.device a:visited, a:active, a:hover {
-    color: #fff;
-}
-
-.device a:hover {
-    text-decoration: underline;
+a:hover {
+    text-decoration:underline;
 }

@@ -1,5 +1,6 @@
 package org.rentic.rentic_javaee.rest;
 
+import org.rentic.rentic_javaee.model.Conversa;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -14,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,48 +130,6 @@ public class UserRESTService {
 
     }
 
-    @Path("register")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String register(
-            @Context HttpServletRequest req,
-            @Context HttpServletResponse response,
-            registre u) throws IOException {
-
-        HttpSession session = req.getSession();
-
-        if (session == null) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.flushBuffer();
-            return Error.build("500","Sessions not supported!");
-        }
-
-        if (session.getAttribute("rentic_auth_id") != null) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.flushBuffer();
-            return Error.build("500","You are already authenticated!");
-        }
-
-        User nu = userService.register(u);
-
-        if (nu!=null) {
-            try {
-                session.setAttribute("rentic_auth_id", nu.getId());
-
-                return Answer("200", toJSON.Object(nu));
-            } catch (Exception ex) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.flushBuffer();
-                return Error.build("500",ex.getMessage());
-            }
-        }else {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.flushBuffer();
-            return Error.build("500", "Your email is already registered!");
-        }
-    }
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -218,6 +178,92 @@ public class UserRESTService {
             response.flushBuffer();
             Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
             return Error.build("500","Error cocerting User to JSON!");
+        }
+    }
+
+    @GET
+    @Path("chats")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getChats(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response) throws IOException {
+
+        // Access to the HTTP session
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You are not authenticated!");
+        }
+
+        Collection<Conversa> c= userService.getChats(userid);
+
+        // Check if the user id exists
+        if (c == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","User id == " + userid + " does not exist!");
+        }
+
+        try {
+            return Answer("200", toJSON.Object(c));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
+            return Error.build("500","Error cocerting User to JSON!");
+        }
+    }
+
+    @Path("register")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String register(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            registre u) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") != null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You are already authenticated!");
+        }
+
+        User nu = userService.register(u);
+
+        if (nu!=null) {
+            try {
+                session.setAttribute("rentic_auth_id", nu.getId());
+
+                return Answer("200", toJSON.Object(nu));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500",ex.getMessage());
+            }
+        }else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Your email is already registered!");
         }
     }
 

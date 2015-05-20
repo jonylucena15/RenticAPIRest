@@ -1,5 +1,6 @@
 package org.rentic.rentic_javaee.service;
 
+import org.rentic.rentic_javaee.model.Conversa;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.rest.UserRESTService;
 
@@ -8,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collection;
 import java.util.List;
 
 @Stateless
@@ -53,6 +55,12 @@ public class UserService {
 
     public User getUser(long id) {
         return em.find(User.class, id);
+    }
+
+    public Collection<Conversa> getChats(long id) {
+
+        User u=em.find(User.class, id);
+        return u.getConverses();
     }
 
 }

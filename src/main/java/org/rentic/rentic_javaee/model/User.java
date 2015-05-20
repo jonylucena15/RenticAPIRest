@@ -50,7 +50,7 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Lloguer> lloguers;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "usuaris")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
     private Collection<Conversa> converses;
 
@@ -114,7 +114,7 @@ public class User implements Serializable {
         return converses;
     }
 
-    public void setConverses(List<Conversa> ts) {
+    public void setConverses(Collection<Conversa> ts) {
         this.converses = ts;
     }
 

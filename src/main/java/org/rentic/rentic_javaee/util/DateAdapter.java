@@ -1,7 +1,6 @@
 package org.rentic.rentic_javaee.util;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

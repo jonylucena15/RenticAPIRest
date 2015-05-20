@@ -285,7 +285,7 @@ public class ObjecteRESTService {
         Lloguer llog = new Lloguer();
 
         try {
-            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idArrendador);
+            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,userId);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,23 +1,20 @@
 package org.rentic.rentic_javaee.websocket.chat;
 
-import org.rentic.rentic_javaee.model.Conversa;
 import org.rentic.rentic_javaee.model.Missatge;
-import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.service.ConversaService;
 import org.rentic.rentic_javaee.util.FromJSONObject;
 import org.rentic.rentic_javaee.util.ToJSON;
 
-import java.io.IOException;
-import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.inject.Inject;
-import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -51,18 +48,18 @@ public class ChatEndpoint {
     }
 
     @OnMessage
-    public void onMessage(String message, Session client,@PathParam("chat-id") String chatId) throws Exception {
+    public void onMessage(String message, Session client,@PathParam("chat-id") Long chatId) throws Exception {
         missatgeConversa m= FromJSONObject.getObject(missatgeConversa.class, message);
+        conversaService.addMissatge(chatId,m.userId,m.missatge,false);
 
         if(clients.size()==2) {
-            if (clients.get(0)!= client)
-                clients.get(0).getBasicRemote().sendText(toJSON.Object(m));
+            List<Missatge> missatges = (List<Missatge>) conversaService.obtenirMissatgesNoEnviats(m.userId, chatId);
+            if (clients.get(0) != client)
+                clients.get(0).getBasicRemote().sendText(toJSON.Object(missatges));
             else
-                clients.get(1).getBasicRemote().sendText(toJSON.Object(m));
-
-            conversaService.addMissatge(chatId,m.userId,m.missatge,false);
-        }else
-            conversaService.addMissatge(chatId,m.userId,m.missatge,false);
+                clients.get(1).getBasicRemote().sendText(toJSON.Object(missatges));
+            conversaService.canviarEstatMissatges(missatges);
+        }
     }
 
 

@@ -1,25 +1,22 @@
 package org.rentic.rentic_javaee.rest;
 
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.Conversa;
-import org.rentic.rentic_javaee.model.Lloguer;
-import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.service.ConversaService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.List;
 
 
 @Path("/converses")
