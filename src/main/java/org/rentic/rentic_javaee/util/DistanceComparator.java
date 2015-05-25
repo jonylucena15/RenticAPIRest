@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 
 /**
- * Created by Jony Lucena on 20/04/2015.
+ * Created by Jony Lucena.
  */
 public class DistanceComparator implements Comparator<Objecte>  {
     Double latitud;

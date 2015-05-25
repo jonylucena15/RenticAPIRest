@@ -1,9 +1,14 @@
 package org.rentic.rentic_javaee.model;
 
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+
+
+/**
+ * Created by Jony Lucena.
+ */
+
 @Embeddable
 public class Disponibilitat implements Serializable {
     /**
@@ -16,6 +21,12 @@ public class Disponibilitat implements Serializable {
 
     @Column(name = "DATA_FI")
     private String dataFi;
+
+
+    public  Disponibilitat(String dataInici, String dataFi) {
+        this.dataInici = dataInici;
+        this.dataFi=dataFi;
+    }
 
     public String getDataInici() {
         return dataInici;

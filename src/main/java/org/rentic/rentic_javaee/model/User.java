@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Created by Jony Lucena.
+ */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class User implements Serializable {

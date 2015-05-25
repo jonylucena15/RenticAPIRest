@@ -19,6 +19,9 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 
+/**
+ * Created by Jony Lucena.
+ */
 @Path("/converses")
 @RequestScoped
 public class ConversaRESTService {

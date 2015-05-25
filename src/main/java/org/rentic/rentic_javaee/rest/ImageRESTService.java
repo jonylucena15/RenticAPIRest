@@ -18,6 +18,10 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Created by Jony Lucena.
+ */
 @Path("/images")
 @RequestScoped
 public class ImageRESTService {

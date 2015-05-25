@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.Set;
 
 
+/**
+ * Created by Jony Lucena.
+ */
 @ApplicationPath("/rest")
 public class MyApplication extends Application {
   @Override

@@ -18,6 +18,10 @@ import javax.persistence.Query;
 import java.io.*;
 import java.util.*;
 
+
+/**
+ * Created by Jony Lucena.
+ */
 @Stateless
 @LocalBean
 public class ObjecteService {
@@ -26,8 +30,6 @@ public class ObjecteService {
     private EntityManager em;
 
     private static final String FILE_PATH = "http://servidor-pds3.rhcloud.com/rest/images/";
-    //private static final String FILE_PATH = "http://localhost:8080/rest/images/";
-    //private static final String FILE_PATH = "http://10.0.3.2:8080/rest/images/";
 
 
     public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {
@@ -126,15 +128,13 @@ public class ObjecteService {
 
             List<Objecte> obj=q.getResultList();
 
-
             Date dataSistema = new Date();
             String dSistema= d.marshal(dataSistema);
 
             int n=obj.size();
             int i=0;
-            Boolean compleix=false;
             while(i<n) {
-                compleix = (obj.get(i).getDispCapDeSetmana() == true || obj.get(i).getDispEntreSetmana() == true);
+                Boolean compleix = (obj.get(i).getDispCapDeSetmana() == true || obj.get(i).getDispEntreSetmana() == true);
 
                 if (!compleix) {
                     List<Disponibilitat> disp = obj.get(i).getDispRangs();
@@ -161,7 +161,8 @@ public class ObjecteService {
                     n--;
                 }
             }
-            if(orderBy.get(0).equals("distancia")){
+
+            if(!orderBy.isEmpty() && orderBy.get(0).equals("distancia")){
                 Collections.sort(obj, new DistanceComparator(latitud, longitud));
             }
             if(limit!=0) {
@@ -197,16 +198,14 @@ public class ObjecteService {
         return llog;
     }
 
-    public List<String> uploadImage(List<InputPart> inPart) {
+    private List<String> uploadImage(List<InputPart> inPart) {
 
         List<String> imatges= new ArrayList<String>();
         int i=0;
         for (InputPart inputPart : inPart) {
             try {
-
                 String fileName = "imatgeObjecte"+i+"_"+Math.random()+".jpg";
 
-                // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
                 String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
@@ -221,10 +220,8 @@ public class ObjecteService {
         return imatges;
     }
 
-    // save uploaded file to a defined location on the server
     private void saveFile(InputStream uploadedInputStream,
                           String serverLocation) throws IOException {
-
         int read;
         byte[] bytes = new byte[1024];
 

@@ -12,6 +12,10 @@ import javax.persistence.Query;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Created by Jony Lucena.
+ */
 @Stateless
 @LocalBean
 public class UserService {

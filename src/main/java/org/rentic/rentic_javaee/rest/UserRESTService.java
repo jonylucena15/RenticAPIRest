@@ -19,12 +19,13 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// This class is used to process all the authentication related URLs
+/**
+ * Created by Jony Lucena.
+ */
 @Path("/usuaris")
 @RequestScoped
 public class UserRESTService {
 
-    // This is the EJB used to access user data
     @EJB
     UserService userService;
 

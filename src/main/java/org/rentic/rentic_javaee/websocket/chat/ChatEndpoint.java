@@ -16,22 +16,17 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Created by Jony Lucena on 13/05/2015.
+ * Created by Jony Lucena.
  */
-
-
 @ServerEndpoint(value="/chat/{chat-id}")
 public class ChatEndpoint {
 
     @EJB
     ConversaService conversaService;
 
-
     @Inject
     ToJSON toJSON;
-
 
     public static class missatgeConversa {
         public String missatge;

@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.List;
 
 
+/**
+ * Created by Jony Lucena.
+ */
 @Entity
 public class Objecte implements Serializable{
 
@@ -40,15 +43,6 @@ public class Objecte implements Serializable{
 
     @Column(name = "URL_IMATGE")
     private List<String> imatges;
-
-    @ElementCollection
-    @CollectionTable(
-            name="TAGS",
-            joinColumns=@JoinColumn(name="OBJECTE_ID")
-    )
-
-    @Column (name = "NOM_TAG")
-    private List<String> tags;
 
     @Column(name = "DISP_CAP_DE_SETMANA")
     private Boolean dispCapDeSetmana;
@@ -92,7 +86,6 @@ public class Objecte implements Serializable{
         descripcio="";
         preu=null;
         imatges=new ArrayList<String>();
-        tags=new ArrayList<String>();
         dispCapDeSetmana=false;
         dispEntreSetmana=false;
         dispRangs=new ArrayList<Disponibilitat>();
@@ -132,14 +125,6 @@ public class Objecte implements Serializable{
 
     public void setPreu(Number preu) {
         this.preu = preu;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
     }
 
     public List<Disponibilitat> getDispRangs() {  return dispRangs;

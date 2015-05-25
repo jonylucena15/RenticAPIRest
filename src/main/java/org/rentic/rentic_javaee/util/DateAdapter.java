@@ -4,12 +4,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 /**
- * Created with IntelliJ IDEA.
- * User: imartin
- * Date: 28/03/13
- * Time: 23:40
- * To change this template use File | Settings | File Templates.
+ * Created by Jony Lucena.
  */
 public class DateAdapter extends XmlAdapter<String, Date> {
 

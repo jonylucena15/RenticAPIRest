@@ -16,6 +16,10 @@ import javax.persistence.PersistenceContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Created by Jony Lucena.
+ */
 @Singleton
 @Startup
 public class InitDB {
@@ -29,20 +33,30 @@ public class InitDB {
     @PostConstruct
     private void init() {
         log.log(Level.INFO, "INIT PDS DATABASE");
-
         try {
             User exists = em.find(User.class, 1L);
             if (exists == null) {
                 User u = new User();
-                u.setPassword("malament");
-                u.setNomComplet("provaa sadsa");
-                u.setEmail("yo@hotmail.com");
+                u.setPassword("admin");
+                u.setNomComplet("Usuari Administrador");
+                u.setEmail("admin@admin");
                 em.persist(u);
                 em.flush();
             } else {
-                log.log(Level.INFO, "Initial user already exists");
+                log.log(Level.INFO, "Initial user1 already exists");
             }
 
+            exists = em.find(User.class, 2L);
+            if (exists == null) {
+                User u = new User();
+                u.setPassword("client");
+                u.setNomComplet("Client prova");
+                u.setEmail("client@client");
+                em.persist(u);
+                em.flush();
+            } else {
+                log.log(Level.INFO, "Initial user2 already exists");
+            }
         } catch (Exception ex) {
             log.log(Level.INFO, "Error initializing database");
         }

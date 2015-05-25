@@ -6,9 +6,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 
-  @Provider
-  public class DefaultException implements ExceptionMapper<Exception> {
-
+/**
+ * Created by Jony Lucena.
+ */
+@Provider
+public class DefaultException implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception e) {
@@ -18,5 +20,5 @@ import javax.ws.rs.ext.Provider;
     }
 
 
-  }
+}
 

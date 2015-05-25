@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * Created by Jony Lucena on 20/04/2015.
+ * Created by Jony Lucena.
  */
 public class FromJSONObject {
 

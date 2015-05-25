@@ -1,9 +1,5 @@
 package org.rentic.rentic_javaee.websocket.chat;
 
-/**
- * Created by Jony Lucena on 13/05/2015.
- */
-
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -11,7 +7,9 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-
+/**
+ * Created by Jony Lucena.
+ */
 @ClientEndpoint
 public class ChatClientEndpoint2 {
     public static String TEXT = "Client2 joins";

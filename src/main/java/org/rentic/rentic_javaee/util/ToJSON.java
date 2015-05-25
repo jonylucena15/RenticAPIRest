@@ -17,9 +17,9 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
- *
- * @author imartin
+ * Created by Jony Lucena.
  */
 @Singleton
 public class ToJSON {

@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Created by Jony Lucena on 29/04/2015.
- */
 
+/**
+ * Created by Jony Lucena.
+ */
 @Entity
 public class Missatge implements Serializable {
 

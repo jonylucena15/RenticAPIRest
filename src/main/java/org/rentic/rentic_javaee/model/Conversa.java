@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by Jony Lucena on 14/05/2015.
+ * Created by Jony Lucena.
  */
 @Entity
 public class Conversa implements Serializable {

@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.List;
 
 
+/**
+ * Created by Jony Lucena.
+ */
 @Path("/objectes")
 @RequestScoped
 public class ObjecteRESTService {
