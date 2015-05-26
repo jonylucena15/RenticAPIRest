@@ -5,7 +5,6 @@ import org.rentic.rentic_javaee.service.ConversaService;
 import org.rentic.rentic_javaee.util.FromJSONObject;
 import org.rentic.rentic_javaee.util.ToJSON;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -22,7 +21,7 @@ import java.util.List;
 @ServerEndpoint(value="/chat/{chat-id}")
 public class ChatEndpoint {
 
-    @EJB
+    @Inject
     ConversaService conversaService;
 
     @Inject
@@ -30,8 +29,6 @@ public class ChatEndpoint {
 
     public static class missatgeConversa {
         public String missatge;
-        public String dataHora;
-        public Boolean enviat;
         public Long userId;
     }
 
