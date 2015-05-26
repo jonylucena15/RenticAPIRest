@@ -22,7 +22,10 @@ public class Disponibilitat implements Serializable {
     @Column(name = "DATA_FI")
     private String dataFi;
 
-
+    public Disponibilitat(){
+        dataFi=null;
+        dataInici=null;
+    }
     public  Disponibilitat(String dataInici, String dataFi) {
         this.dataInici = dataInici;
         this.dataFi=dataFi;

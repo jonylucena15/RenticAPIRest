@@ -56,6 +56,7 @@ public class ConversaService {
 
         em.persist(missatge);
         conversa.addMissatge(missatge);
+        em.flush();
 
         return conversa;
 
