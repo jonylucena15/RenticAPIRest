@@ -1,15 +1,17 @@
 package org.rentic.rentic_javaee.service;
 
 import org.rentic.rentic_javaee.model.Conversa;
+import org.rentic.rentic_javaee.model.Missatge;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.rest.UserRESTService;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,6 +21,8 @@ import java.util.List;
 @Stateless
 @LocalBean
 public class UserService {
+    @Inject
+    ConversaService conversaService;
 
     @PersistenceContext
     private EntityManager em;
@@ -57,15 +61,27 @@ public class UserService {
 
     }
 
-    public User getUser(long id) {
+    public User getUser(Long id) {
         return em.find(User.class, id);
     }
 
-    public Collection<Conversa> getChats(long id) {
+    public List<Conversa> getChats(Long id) {
 
         User u=em.find(User.class, id);
-        u.getConverses().size();
-        return u.getConverses();
+        List<Conversa> c= (List<Conversa>) u.getConverses();
+        List<Conversa> auxC= new ArrayList<>();
+        for(int i = 0; i<c.size(); i++){
+            List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
+            Conversa con=new Conversa();
+            con.setId(c.get(i).getId());
+            con.setObjecte(c.get(i).getObjecte());
+            con.setUsers(c.get(i).getUsers());
+            con.setMissatges(missatges);
+            auxC.add(con);
+            conversaService.canviarEstatMissatges(missatges);
+        }
+
+        return auxC;
     }
 
 }

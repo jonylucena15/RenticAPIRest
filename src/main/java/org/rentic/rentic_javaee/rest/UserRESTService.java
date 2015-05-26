@@ -15,7 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -183,7 +183,7 @@ public class UserRESTService {
     }
 
     @GET
-    @Path("chats")
+    @Path("converses")
     @Produces(MediaType.APPLICATION_JSON)
     public String getChats(
             @Context HttpServletRequest req,
@@ -207,7 +207,7 @@ public class UserRESTService {
             return Error.build("500","You are not authenticated!");
         }
 
-        Collection<Conversa> c= userService.getChats(userid);
+        List<Conversa> c= userService.getChats(userid);
 
         // Check if the user id exists
         if (c == null) {

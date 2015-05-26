@@ -98,6 +98,18 @@ public class ConversaService {
         return m;
     }
 
+    public Collection<Missatge> obtenirMissatgesNoRebuts(Long idUsers,Long chatId ) {
+
+        Query q=null;
+        q = em.createQuery("select mis from  Missatge mis where mis.userId<>:idUsers and mis.conversaId=:chatId and mis.enviat=FALSE");
+        q.setParameter("idUsers",idUsers);
+        q.setParameter("chatId", chatId);
+
+        List<Missatge> m=q.getResultList();
+
+        return m;
+    }
+
     public void canviarEstatMissatges(List<Missatge> missatges) {
         for(int i=0; i<missatges.size();i++){
             Missatge m=em.find(Missatge.class,missatges.get(i).getUserId());
