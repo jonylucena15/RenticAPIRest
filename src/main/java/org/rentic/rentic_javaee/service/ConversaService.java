@@ -112,7 +112,7 @@ public class ConversaService {
 
     public void canviarEstatMissatges(List<Missatge> missatges) {
         for(int i=0; i<missatges.size();i++){
-            Missatge m=em.find(Missatge.class,missatges.get(i).getUserId());
+            Missatge m=em.find(Missatge.class,missatges.get(i).getId());
             m.setEnviat(true);
             em.persist(m);
         }
