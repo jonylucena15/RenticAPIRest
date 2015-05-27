@@ -58,7 +58,6 @@ public class User implements Serializable {
     @JsonIgnore
     private Collection<Conversa> converses;
 
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonIgnore
     private Collection<Missatge> missatges;

@@ -74,11 +74,6 @@ public class ObjecteRESTService {
         try {
             Objecte o = objecteService.getObjecte(id);
             // Check that the user authenticated in the session owns the object it is trying to access
-            if (o.getUser().getId() != userId) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.flushBuffer();
-                return Error.build("500", "You don't own this task!");
-            }
             return Answer("200", toJSON.Object(o));
         } catch (Exception ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
