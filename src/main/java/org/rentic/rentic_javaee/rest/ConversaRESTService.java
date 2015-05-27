@@ -92,7 +92,7 @@ public class ConversaRESTService {
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Error crean la conversa");
+            return Error.build("500", "Error creant la conversa");
         }
     }
 

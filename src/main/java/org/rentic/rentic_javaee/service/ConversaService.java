@@ -33,33 +33,34 @@ public class ConversaService {
         User user = em.find(User.class, userId);
         Objecte objecte = em.find(Objecte.class, idObjecte);
         User user2 = em.find(User.class, idArrendador);
+        if(objecte!=null && user!=null && user2!=null) {
+            conversa.addUser(user);
+            conversa.addUser(user2);
+            conversa.setObjecte(objecte);
+            conversa.setObjectId(objecte.getId());
 
-        conversa.addUser(user);
-        conversa.addUser(user2);
-        conversa.setObjecte(objecte);
-        conversa.setObjectId(objecte.getId());
+            em.persist(conversa);
+            user.addConversa(conversa);
+            user2.addConversa(conversa);
+            objecte.addConversa(conversa);
 
-        em.persist(conversa);
-        user.addConversa(conversa);
-        user2.addConversa(conversa);
-        objecte.addConversa(conversa);
+            Date data = new Date();
+            SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 
-        Date data= new Date();
-        SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+            Missatge missatge = new Missatge();
+            missatge.setUser(user);
+            missatge.setMissatge("Hola, vull llogar el teu objecte des del " + dataInici + " fins el " + dataFi);
+            missatge.setEnviat(false);
+            missatge.setDataHota(formate.format(data));
+            missatge.setConversa(conversa);
 
-        Missatge missatge = new Missatge();
-        missatge.setUser(user);
-        missatge.setMissatge("Hola, vull llogar el teu objecte des del " + dataInici + " fins el " + dataFi);
-        missatge.setEnviat(false);
-        missatge.setDataHota(formate.format(data));
-        missatge.setConversa(conversa);
+            em.persist(missatge);
+            conversa.addMissatge(missatge);
+            em.flush();
 
-        em.persist(missatge);
-        conversa.addMissatge(missatge);
-        em.flush();
-
-        return conversa;
-
+            return conversa;
+        }else
+            return null;
     }
 
     public void addMissatge(Long chatId, Long userId, String text, boolean b) throws Exception {
