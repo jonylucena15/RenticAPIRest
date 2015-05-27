@@ -32,7 +32,7 @@ public class Missatge implements Serializable {
     private Conversa conversa;
 
 
-    @Column(name = "MISSATGE")
+    @Column(name = "MISSATGE", length=1000)
     private String missatge;
 
 

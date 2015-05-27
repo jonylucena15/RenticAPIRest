@@ -29,7 +29,7 @@ public class Objecte implements Serializable{
     @Column(name = "NOM")
     private String nom;
 
-    @Column(name = "DESCRIPCIO")
+    @Column(name = "DESCRIPCIO", length=1000)
     private String descripcio;
 
     @Column(name = "PREU")
