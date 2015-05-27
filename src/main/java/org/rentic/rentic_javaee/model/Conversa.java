@@ -1,7 +1,5 @@
 package org.rentic.rentic_javaee.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ public class Conversa implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "OBJECTE_ID", nullable=false)
-    @JsonIgnore
     private Objecte objecte;
 
     @OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "conversa")

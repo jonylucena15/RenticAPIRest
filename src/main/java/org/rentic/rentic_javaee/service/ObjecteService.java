@@ -86,7 +86,7 @@ public class ObjecteService {
 
         Objecte aux= em.find(Objecte.class, o.getId());
         User u=aux.getUser();
-        if(aux.getUser().getId()==userId) {
+        if(aux.getUser().getId().intValue()==userId.intValue()) {
             em.detach(o);
             if (!inPart.isEmpty())
                 o.setImatges(uploadImage(inPart));
@@ -106,7 +106,7 @@ public class ObjecteService {
     public  Boolean deleteObjecte(Long id, Long userID) throws Exception {
         Objecte o= em.find(Objecte.class, id);
         if(o!=null) {
-            if (o.getUser().getId() == userID) {
+            if (o.getUser().getId().intValue() == userID.intValue()) {
                 em.remove(o);
                 return true;
             }
@@ -179,23 +179,26 @@ public class ObjecteService {
     }
 
 
-    public Lloguer addLloguer(String dataInici, String dataFi, Long idObjecte, Long idUsuari) throws Exception {
+    public Lloguer addLloguer(String dataInici, String dataFi, Long idObjecte, Long idUsuari, Long idArrendador) throws Exception {
+        User userP=em.find(User.class, idArrendador);
+        Objecte objecte = em.find(Objecte.class, idObjecte);
+        if (objecte.getUser().getId().intValue()==userP.getId().intValue()) {
+            User user = em.find(User.class, idUsuari);
 
-        User user = em.find(User.class, idUsuari);
-        Objecte objecte= em.find(Objecte.class,idObjecte);
+            Lloguer llog = new Lloguer();
+            llog.setDataFi(dataFi);
+            llog.setDataInici(dataInici);
+            llog.setUser(user);
+            llog.setObjecte(objecte);
 
-        Lloguer llog = new Lloguer();
-        llog.setDataFi(dataFi);
-        llog.setDataInici(dataInici);
-        llog.setUser(user);
-        llog.setObjecte(objecte);
+            user.addLloguer(llog);
+            objecte.addLloguer(llog);
 
-        user.addLloguer(llog);
-        objecte.addLloguer(llog);
+            em.persist(llog);
 
-        em.persist(llog);
-
-        return llog;
+            return llog;
+        }else
+            return null;
     }
 
     private List<String> uploadImage(List<InputPart> inPart) {

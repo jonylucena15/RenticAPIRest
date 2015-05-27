@@ -2,6 +2,7 @@ package org.rentic.rentic_javaee.rest;
 
 import org.rentic.rentic_javaee.model.Conversa;
 import org.rentic.rentic_javaee.service.ConversaService;
+import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
 import javax.ejb.EJB;
@@ -10,13 +11,13 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -29,6 +30,8 @@ public class ConversaRESTService {
     @EJB
     ConversaService conversaService;
 
+    @EJB
+    UserService userService;
 
     @Inject
     ToJSON toJSON;
@@ -90,6 +93,49 @@ public class ConversaRESTService {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
             return Error.build("500", "Error crean la conversa");
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getChats(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response) throws IOException {
+
+        // Access to the HTTP session
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Sessions not supported!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","You are not authenticated!");
+        }
+
+        List<Conversa> c= userService.getChats(userid);
+
+        // Check if the user id exists
+        if (c == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","User id == " + userid + " does not exist!");
+        }
+
+        try {
+            return Answer("200", toJSON.Object(c));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
+            return Error.build("500","Error cocerting User to JSON!");
         }
     }
 }

@@ -43,7 +43,7 @@ public class ObjecteRESTService {
     public static class lloguer {
         public String dataInici;
         public String dataFi;
-        public Long idArrendador;
+        public Long idLlogater;
     }
 
 
@@ -283,7 +283,7 @@ public class ObjecteRESTService {
         Lloguer llog = new Lloguer();
 
         try {
-            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,userId);
+            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idLlogater,userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,7 +299,7 @@ public class ObjecteRESTService {
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Error guardant imatge");
+            return Error.build("500", "You aren't the owner of this object, or object not exist");
         }
     }
 
