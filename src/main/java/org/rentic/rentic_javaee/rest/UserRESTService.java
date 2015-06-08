@@ -75,6 +75,7 @@ public class UserRESTService {
                     // The username and password match, add the "rentic_auth_id" attribute to the session
                     // to identify the user in the next calls
                     session.setAttribute("rentic_auth_id", u.getId());
+                    session.setMaxInactiveInterval(-1);
 
                     return Answer("200", toJSON.Object(u));
 
@@ -210,6 +211,7 @@ public class UserRESTService {
         if (nu!=null) {
             try {
                 session.setAttribute("rentic_auth_id", nu.getId());
+                session.setMaxInactiveInterval(-1);
 
                 return Answer("200", toJSON.Object(nu));
             } catch (Exception ex) {
