@@ -43,7 +43,7 @@ public class ObjecteRESTService {
     public static class lloguer {
         public String dataInici;
         public String dataFi;
-        public Long idArrendador;
+        public Long idLlogater;
     }
 
 
@@ -283,7 +283,7 @@ public class ObjecteRESTService {
         Lloguer llog = new Lloguer();
 
         try {
-            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idArrendador,userId);
+            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idLlogater,userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
