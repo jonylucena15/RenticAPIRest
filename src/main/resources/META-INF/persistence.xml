@@ -7,7 +7,7 @@
          can find it in the source at src/main/webapp/WEB-INF/kitchensink-quickstart-ds.xml -->
     <jta-data-source>jdbc/pdsdb</jta-data-source>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="none"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
         <property name="hibernate.enable_lazy_load_no_trans" value="true" />
     </properties>
   </persistence-unit>

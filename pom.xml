@@ -7,8 +7,8 @@
   <artifactId>rentic_javaee</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Exemple de projecte PDS</name>
-  <description>Punt de partida pel projecte de PDS</description>
+  <name>Rentic</name>
+  <description>Rentic, la nova generacio dels lloguers</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
