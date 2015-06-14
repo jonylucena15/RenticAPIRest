@@ -9,7 +9,7 @@
   <packaging>war</packaging>
   <name>Rentic</name>
   <description>Rentic, la nova generacio dels lloguers</description>
-
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Explicitly declaring the source encoding eliminates the following message: -->

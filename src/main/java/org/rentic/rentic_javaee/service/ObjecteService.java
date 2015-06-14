@@ -29,7 +29,7 @@ public class ObjecteService {
     @PersistenceContext
     private EntityManager em;
 
-    private static final String FILE_PATH = "http://servidor-pds3.rhcloud.com/rest/images/";
+    private static final String FILE_PATH = "http://servidor1-pds3.rhcloud.com/rest/images/";
 
 
     public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {

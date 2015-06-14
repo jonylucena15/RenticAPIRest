@@ -77,8 +77,8 @@ public class ImageRESTService {
                 // Handle the body of that part with an InputStream
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                // fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
-                fileName = "C:\\Users\\Jony Lucena\\" + fileName;
+                fileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+
 
                 saveFile(istream, fileName);
 
