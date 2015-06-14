@@ -108,7 +108,12 @@ public class ObjecteRESTService {
         }
 
         try {
-            List<Objecte> results = objecteService.getObjectes(idUser,limit,orderBy, latitud, longitud);
+            List<Objecte> results =null;
+            if (idUser!=null) {
+                results = objecteService.getObjectesUsuari(idUser);
+            }else {
+                results = objecteService.getObjectes(limit, orderBy, latitud, longitud);
+            }
             return Answer("200", toJSON.Object(results));
         } catch (EJBException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

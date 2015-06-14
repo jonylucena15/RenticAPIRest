@@ -113,19 +113,28 @@ public class ObjecteService {
         }
         return false;
     }
+    public List<Objecte> getObjectesUsuari(Long idUser) {
+        Query q = null;
+        List<Objecte> obj =  new ArrayList<Objecte>();
+        try {
 
-    public List<Objecte> getObjectes(Long idUser, int limit, List<String> orderBy, Double latitud, Double longitud) {
+            q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers");
+            q.setParameter("idUsers", idUser);
+            obj = q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return obj;
+    }
+
+
+    public List<Objecte> getObjectes(int limit, List<String> orderBy, Double latitud, Double longitud) {
         List <Objecte> o = new ArrayList<Objecte>();
         DateAdapter d = new DateAdapter();
         Query q=null;
         try {
-            if (idUser!=null){
-                q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers");
-                q.setParameter("idUsers",idUser);
-            }else{
-                q = em.createQuery("select obj from  Objecte obj");
-            }
-
+            q = em.createQuery("select obj from  Objecte obj");
             List<Objecte> obj=q.getResultList();
 
             Date dataSistema = new Date();
