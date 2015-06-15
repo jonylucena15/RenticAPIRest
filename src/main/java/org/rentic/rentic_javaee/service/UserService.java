@@ -70,8 +70,8 @@ public class UserService {
         List<Conversa> c= (List<Conversa>) u.getConverses();
         //List<Conversa> auxC= new ArrayList<>();
         for(int i = 0; i<c.size(); i++){
-        //List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
-            List<Missatge> missatges =(List<Missatge>) c.get(i).getMissatges() ;
+            List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
+
             //Conversa con=new Conversa();
             //con.setId(c.get(i).getId());
             //con.setObjecte(c.get(i).getObjecte());
