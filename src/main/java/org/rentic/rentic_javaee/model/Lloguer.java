@@ -32,7 +32,7 @@ public class Lloguer implements Serializable {
     @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne
     @JoinColumn(name = "USUARI_ID", nullable=false)
     @JsonIgnore
     private User user;
@@ -40,7 +40,7 @@ public class Lloguer implements Serializable {
     @Column(name = "OBJECTE_ID", insertable = false, updatable = false)
     private Long objectId;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne
     @JoinColumn(name = "OBJECTE_ID", nullable=false)
     @JsonIgnore
     private Objecte objecte;

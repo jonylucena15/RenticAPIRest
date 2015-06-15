@@ -68,7 +68,7 @@ public class Objecte implements Serializable{
     @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
-    @ManyToOne (cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne
     @JoinColumn(name = "USUARI_ID", nullable=false)
     private User user;
 
