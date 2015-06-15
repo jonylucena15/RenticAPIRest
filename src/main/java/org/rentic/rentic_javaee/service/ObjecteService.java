@@ -12,10 +12,10 @@ import org.rentic.rentic_javaee.util.FromJSONObject;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.io.*;
 import java.util.*;
 
 
@@ -26,10 +26,13 @@ import java.util.*;
 @LocalBean
 public class ObjecteService {
 
+    @Inject
+    ImageService imageService;
+
     @PersistenceContext
     private EntityManager em;
 
-    private static final String FILE_PATH = "http://servidor-pds3.rhcloud.com/rest/images/";
+
 
 
     public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {
@@ -55,7 +58,7 @@ public class ObjecteService {
         Objecte o= FromJSONObject.getObject(Objecte.class, objecte);
         o.setUser(user);
         if(!inPart.isEmpty())
-            o.setImatges(uploadImage(inPart));
+            o.setImatges(imageService.uploadImage(inPart));
 
         user.addObjecte(o);
 
@@ -89,7 +92,7 @@ public class ObjecteService {
         if(aux.getUser().getId().intValue()==userId.intValue()) {
             em.detach(o);
             if (!inPart.isEmpty())
-                o.setImatges(uploadImage(inPart));
+                o.setImatges(imageService.uploadImage(inPart));
             o.setUser(u);
             em.merge(o);
 
@@ -208,40 +211,5 @@ public class ObjecteService {
             return llog;
         }else
             return null;
-    }
-
-    private List<String> uploadImage(List<InputPart> inPart) {
-
-        List<String> imatges= new ArrayList<String>();
-        int i=0;
-        for (InputPart inputPart : inPart) {
-            try {
-                String fileName = "imatgeObjecte"+i+"_"+Math.random()+".jpg";
-
-                InputStream istream = inputPart.getBody(InputStream.class, null);
-
-                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
-
-                saveFile(istream, serverFileName);
-                imatges.add(FILE_PATH+fileName);
-            } catch (Exception e) {
-                return null;
-            }
-            i++;
-        }
-        return imatges;
-    }
-
-    private void saveFile(InputStream uploadedInputStream,
-                          String serverLocation) throws IOException {
-        int read;
-        byte[] bytes = new byte[1024];
-
-        OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
-        while ((read = uploadedInputStream.read(bytes)) != -1) {
-            outpuStream.write(bytes, 0, read);
-        }
-        outpuStream.flush();
-        outpuStream.close();
     }
 }

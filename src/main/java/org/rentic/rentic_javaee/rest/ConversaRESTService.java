@@ -62,7 +62,7 @@ public class ConversaRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
@@ -70,7 +70,7 @@ public class ConversaRESTService {
         if (userId == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "User not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
         Conversa c = new Conversa();
@@ -108,7 +108,7 @@ public class ConversaRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","Sessions not supported!");
+            return Error.build("500","Error Sessions no soportades!");
         }
 
         Long userid = (Long) session.getAttribute("rentic_auth_id");
@@ -117,7 +117,7 @@ public class ConversaRESTService {
         if (userid == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","You are not authenticated!");
+            return Error.build("500","Error No estas loguejat!");
         }
 
         List<Conversa> c= conversaService.getChats(userid);
@@ -126,7 +126,7 @@ public class ConversaRESTService {
         if (c == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","User id == " + userid + " does not exist!");
+            return Error.build("500","Error l'id d'usuari " + userid + " no existeixt!");
         }
 
         try {
@@ -134,8 +134,8 @@ public class ConversaRESTService {
         } catch (IOException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
-            return Error.build("500","Error cocerting User to JSON!");
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
         }
     }
 }

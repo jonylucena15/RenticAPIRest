@@ -144,7 +144,7 @@ public class UserRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","Sessions not supported!");
+            return Error.build("500","Error sessions no soportades!");
         }
 
         Long userid = (Long) session.getAttribute("rentic_auth_id");
@@ -153,14 +153,14 @@ public class UserRESTService {
         if (userid == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","You are not authenticated!");
+            return Error.build("500","Error no estas loguejat!");
         }
 
         // Check if the user is trying to access other user's data
         if (id.intValue() != userid.intValue() ) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","You cannot access data fromm other users!");
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
         }
 
         User u = userService.getUser(id);
@@ -169,7 +169,7 @@ public class UserRESTService {
         if (u == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","User id == " + id + " does not exist!");
+            return Error.build("500","L'usuari amb ID " + id + " no existeix!");
         }
 
 
@@ -178,8 +178,8 @@ public class UserRESTService {
         } catch (IOException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error cocerting User to JSON!", ex);
-            return Error.build("500","Error cocerting User to JSON!");
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
         }
     }
 
@@ -197,13 +197,13 @@ public class UserRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","Sessions not supported!");
+            return Error.build("500","Error sessions no soportades!");
         }
 
         if (session.getAttribute("rentic_auth_id") != null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500","You are already authenticated!");
+            return Error.build("500","Error ja estas loguejat!");
         }
 
         User nu = userService.register(u);
@@ -217,13 +217,12 @@ public class UserRESTService {
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500",ex.getMessage());
+                return Error.build("500","Error transformant l'usuari a JSON!");
             }
         }else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Your email is already registered!");
+            return Error.build("500", "Error el email ja esta registrat!");
         }
     }
-
 }

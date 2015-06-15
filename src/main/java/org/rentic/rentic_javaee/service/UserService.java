@@ -5,7 +5,6 @@ import org.rentic.rentic_javaee.rest.UserRESTService;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -18,8 +17,6 @@ import java.util.List;
 @Stateless
 @LocalBean
 public class UserService {
-    @Inject
-    ConversaService conversaService;
 
     @PersistenceContext
     private EntityManager em;

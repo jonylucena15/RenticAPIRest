@@ -60,7 +60,7 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error Sessions no soportades!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
@@ -68,7 +68,7 @@ public class ObjecteRESTService {
         if (userId == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "User not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
         try {
@@ -98,13 +98,13 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
         Long userId = (Long) session.getAttribute("rentic_auth_id");
         if (userId == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "User not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
         try {
@@ -140,13 +140,13 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
 
         if (session.getAttribute("rentic_auth_id") == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "You are not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
@@ -164,12 +164,12 @@ public class ObjecteRESTService {
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", ex.getMessage());
+                return Error.build("500", "Error passant l'objecte a JSON!");
             }
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Error guardant imatge");
+            return Error.build("500", "Error guardant l'objecte!");
         }
     }
 
@@ -186,7 +186,7 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
@@ -194,22 +194,21 @@ public class ObjecteRESTService {
         if (userId == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "User not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
-
         try {
 
             // Check that the user authenticated in the session owns the object it is trying to access
             if ( !objecteService.deleteObjecte(id, userId)) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", "You aren't the owner of this object, or object not exist");
+                return Error.build("500", "Error no ets el propietari d'aquest objecte, o l'objecte no existeix");
             }
             return Answer("200", "{}");
         } catch (Exception ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", ex.getMessage());
+            return Error.build("500", "Error transformant l'objecte a JSON!");
         }
     }
 
@@ -226,13 +225,13 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
 
         if (session.getAttribute("rentic_auth_id") == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "You are not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
 
@@ -244,7 +243,9 @@ public class ObjecteRESTService {
             o = objecteService.updateObjecte(input, userId);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error al actualitzar l'objecte!");
         }
 
         if (o != null) {
@@ -253,12 +254,12 @@ public class ObjecteRESTService {
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", ex.getMessage());
+                return Error.build("500", "Error passant l'objecte a JSON!");
             }
         } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", "You aren't the owner of this object, or object not exist");
+                return Error.build("500", "Error no ets el propietari de l'objecte, o l'objecte no existeix!");
         }
     }
     @POST
@@ -275,13 +276,13 @@ public class ObjecteRESTService {
         if (session == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "Sessions not supported!");
+            return Error.build("500", "Error sessions no soportades!");
         }
 
         if (session.getAttribute("rentic_auth_id") == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "You are not authenticated!");
+            return Error.build("500", "Error no estas loguejat!");
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
@@ -290,7 +291,9 @@ public class ObjecteRESTService {
         try {
             llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idLlogater,userId);
         } catch (Exception e) {
-            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error creant el lloguer de l'objecte");
         }
 
         if (llog != null) {
@@ -299,12 +302,12 @@ public class ObjecteRESTService {
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.flushBuffer();
-                return Error.build("500", ex.getMessage());
+                return Error.build("500", "Error transformant l'objecte a JSON");
             }
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
-            return Error.build("500", "You aren't the owner of this object, or object not exist");
+            return Error.build("500", "Error no ets el propietari de l'objecte o l'objecte no existeix");
         }
     }
 
