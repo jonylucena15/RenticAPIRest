@@ -86,6 +86,17 @@ public class ConversaService {
 
     }
 
+    public List<Conversa> getChats(Long id) {
+        User u=em.find(User.class, id);
+        List<Conversa> c= (List<Conversa>) u.getConverses();
+        for(int i = 0; i<c.size(); i++){
+            List<Missatge> missatges =(List<Missatge>) obtenirMissatgesNoRebuts(id, c.get(i).getId());
+            canviarEstatMissatges(missatges);
+        }
+
+        return c;
+    }
+
 
     public Collection<Missatge> obtenirMissatgesNoEnviats(Long idUsers,Long chatId) {
 

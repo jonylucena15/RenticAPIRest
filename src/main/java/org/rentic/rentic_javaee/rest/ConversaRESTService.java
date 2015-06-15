@@ -120,7 +120,7 @@ public class ConversaRESTService {
             return Error.build("500","You are not authenticated!");
         }
 
-        List<Conversa> c= userService.getChats(userid);
+        List<Conversa> c= conversaService.getChats(userid);
 
         // Check if the user id exists
         if (c == null) {

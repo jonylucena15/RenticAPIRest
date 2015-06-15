@@ -1,7 +1,5 @@
 package org.rentic.rentic_javaee.service;
 
-import org.rentic.rentic_javaee.model.Conversa;
-import org.rentic.rentic_javaee.model.Missatge;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.rest.UserRESTService;
 
@@ -62,26 +60,6 @@ public class UserService {
 
     public User getUser(Long id) {
         return em.find(User.class, id);
-    }
-
-    public List<Conversa> getChats(Long id) {
-
-        User u=em.find(User.class, id);
-        List<Conversa> c= (List<Conversa>) u.getConverses();
-        //List<Conversa> auxC= new ArrayList<>();
-        for(int i = 0; i<c.size(); i++){
-            List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
-
-            //Conversa con=new Conversa();
-            //con.setId(c.get(i).getId());
-            //con.setObjecte(c.get(i).getObjecte());
-            //con.setUsers(c.get(i).getUsers());
-            //con.setMissatges(missatges);
-            //auxC.add(con);
-            conversaService.canviarEstatMissatges(missatges);
-        }
-
-        return c;
     }
 
 }
