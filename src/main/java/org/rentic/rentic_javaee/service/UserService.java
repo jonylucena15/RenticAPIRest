@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,19 +68,20 @@ public class UserService {
 
         User u=em.find(User.class, id);
         List<Conversa> c= (List<Conversa>) u.getConverses();
-        List<Conversa> auxC= new ArrayList<>();
+        //List<Conversa> auxC= new ArrayList<>();
         for(int i = 0; i<c.size(); i++){
-            List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
-            Conversa con=new Conversa();
-            con.setId(c.get(i).getId());
-            con.setObjecte(c.get(i).getObjecte());
-            con.setUsers(c.get(i).getUsers());
-            con.setMissatges(missatges);
-            auxC.add(con);
+        //List<Missatge> missatges =(List<Missatge>) conversaService.obtenirMissatgesNoRebuts(id, c.get(i).getId());
+            List<Missatge> missatges =(List<Missatge>) c.get(i).getMissatges() ;
+            //Conversa con=new Conversa();
+            //con.setId(c.get(i).getId());
+            //con.setObjecte(c.get(i).getObjecte());
+            //con.setUsers(c.get(i).getUsers());
+            //con.setMissatges(missatges);
+            //auxC.add(con);
             conversaService.canviarEstatMissatges(missatges);
         }
 
-        return auxC;
+        return c;
     }
 
 }

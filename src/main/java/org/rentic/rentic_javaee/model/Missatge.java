@@ -46,7 +46,7 @@ public class Missatge implements Serializable {
     @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name = "USUARI_ID",nullable = false)
     @JsonIgnore
     private User user;

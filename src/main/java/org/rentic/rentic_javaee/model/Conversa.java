@@ -31,7 +31,7 @@ public class Conversa implements Serializable {
     private Collection<Missatge> missatges;
 
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
     private Collection<User> users;
 
     public Conversa(){

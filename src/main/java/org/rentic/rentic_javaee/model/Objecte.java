@@ -68,12 +68,11 @@ public class Objecte implements Serializable{
     @Column(name = "USUARI_ID", insertable = false, updatable = false)
     private Long userId;
 
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name = "USUARI_ID", nullable=false)
     private User user;
 
     @OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "objecte")
-    //@JsonIgnore
     private Collection<Lloguer> lloguers;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "objecte")
