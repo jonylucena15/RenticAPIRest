@@ -1,5 +1,6 @@
 package org.rentic.rentic_javaee.rest;
 
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -39,13 +40,19 @@ public class UserRESTService {
         public String email;
         public String password;
     }
-    public static class registre {
+    public static class usuari {
+        public Long idUsuari;
         public String email;
         public String password;
         public String nomComplet;
         public String telefon;
         public String fotoPerfil;
         public String facebookId;
+    }
+
+    static class passwords {
+        public String oldPassword;
+        public String newPassword;
     }
 
     @POST
@@ -130,6 +137,161 @@ public class UserRESTService {
 
     }
 
+    @Path("update")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String UpdateUser(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            usuari input) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        User u=null;
+
+
+        try {
+            u = userService.updateUser(input, userId);
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error al actualitzar l'objecte!");
+        }
+
+        if (u != null) {
+            try {
+                return Answer("200", toJSON.Object(u));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error passant l'objecte a JSON!");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no ets el propietari de l'objecte, o l'objecte no existeix!");
+        }
+    }
+
+    @Path("updateImage")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String UpdateObject(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            MultipartFormDataInput input) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        User u=null;
+
+
+        try {
+            u = userService.updateImage(input, userId);
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error al pujar l'imatge de perfil!");
+        }
+
+        if (u != null) {
+            try {
+                return Answer("200", toJSON.Object(u));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error passant l'objecte a JSON!");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no ets el propietari de l'objecte, o l'objecte no existeix!");
+        }
+    }
+
+    @Path("updatePassword")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String UpdatePassword(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            passwords passwords) throws IOException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        User u =null;
+
+
+        try {
+            u = userService.updatePassword(passwords.oldPassword, passwords.newPassword, userId);
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error al actualitzar l'objecte!");
+        }
+
+        if (u != null) {
+            try {
+                return Answer("200", toJSON.Object(u));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error passant l'objecte a JSON!");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no ets el propietari de l'objecte, o l'objecte no existeix!");
+        }
+    }
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -190,7 +352,7 @@ public class UserRESTService {
     public String register(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
-            registre u) throws IOException {
+            usuari u) throws IOException {
 
         HttpSession session = req.getSession();
 

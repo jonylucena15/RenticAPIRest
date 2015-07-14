@@ -58,7 +58,7 @@ public class ObjecteService {
         Objecte o= FromJSONObject.getObject(Objecte.class, objecte);
         o.setUser(user);
         if(!inPart.isEmpty())
-            o.setImatges(imageService.uploadImage(inPart));
+            o.setImatges(imageService.uploadObjectImage(inPart));
 
         user.addObjecte(o);
 
@@ -92,7 +92,7 @@ public class ObjecteService {
         if(aux.getUser().getId().intValue()==userId.intValue()) {
             em.detach(o);
             if (!inPart.isEmpty())
-                o.setImatges(imageService.uploadImage(inPart));
+                o.setImatges(imageService.uploadObjectImage(inPart));
             o.setUser(u);
             em.merge(o);
 

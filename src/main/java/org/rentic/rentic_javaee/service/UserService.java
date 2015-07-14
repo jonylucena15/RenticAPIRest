@@ -1,14 +1,18 @@
 package org.rentic.rentic_javaee.service;
 
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.rest.UserRESTService;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -17,6 +21,9 @@ import java.util.List;
 @Stateless
 @LocalBean
 public class UserService {
+
+    @Inject
+    ImageService imageService;
 
     @PersistenceContext
     private EntityManager em;
@@ -32,7 +39,7 @@ public class UserService {
         }
     }
 
-    public User register(UserRESTService.registre nu) {
+    public User register(UserRESTService.usuari nu) {
         Query q = em.createQuery("select u from User u where u.email=:email");
         q.setParameter("email", nu.email);
 
@@ -55,8 +62,60 @@ public class UserService {
 
     }
 
+    public User updateUser(UserRESTService.usuari user, Long userId) throws Exception {
+
+        User u= em.find(User.class, userId);
+
+        em.detach(u);
+        if (user.email!=null) u.setEmail(user.email);
+        if (user.facebookId!=null)u.setFacebookId(user.facebookId);
+        if (user.telefon!=null)u.setTelefon(user.telefon);
+        if (user.fotoPerfil!=null)u.setFotoPerfil(user.fotoPerfil);
+        if (user.nomComplet!=null) u.setNomComplet(user.nomComplet);
+
+        em.merge(u);
+
+
+        return u;
+
+
+    }
+
+
+    public User updatePassword(String oldPassword, String newPassword, Long userId) throws Exception {
+
+        User u= em.find(User.class, userId);
+
+        if (u.getPassword().equals(oldPassword)) {
+
+            em.detach(u);
+            u.setPassword(newPassword);
+            em.merge(u);
+
+            return u;
+        }
+
+        return null;
+
+    }
+
     public User getUser(Long id) {
         return em.find(User.class, id);
     }
 
+    public User updateImage(MultipartFormDataInput input, Long userId) {
+
+       Map<String, List<InputPart>> formParts = input.getFormDataMap();
+
+        List<InputPart> image = formParts.get("file");
+
+        User u= em.find(User.class, userId);
+
+        em.detach(u);
+            u.setFotoPerfil(imageService.uploadUserImage(image));
+        em.merge(u);
+
+        return u;
+
+    }
 }

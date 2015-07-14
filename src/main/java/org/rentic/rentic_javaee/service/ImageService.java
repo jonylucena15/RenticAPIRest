@@ -22,7 +22,7 @@ public class ImageService {
 
     private static final String FILE_PATH = "http://servidor-pds3.rhcloud.com/rest/images/";
 
-    public List<String> uploadImage(List<InputPart> inPart) {
+    public List<String> uploadObjectImage(List<InputPart> inPart) {
 
         List<String> imatges= new ArrayList<String>();
         int i=0;
@@ -32,7 +32,7 @@ public class ImageService {
 
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
+                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR/objects/") + fileName;
 
                 saveFile(istream, serverFileName);
                 imatges.add(FILE_PATH+fileName);
@@ -42,6 +42,26 @@ public class ImageService {
             i++;
         }
         return imatges;
+    }
+
+
+    public String uploadUserImage(List<InputPart> inPart) {
+
+
+        try {
+            String fileName = "imatgeUser_"+Math.random()+".jpg";
+
+            InputStream istream = inPart.get(0).getBody(InputStream.class, null);
+
+            String serverFileName = System.getenv("OPENSHIFT_DATA_DIR/users/") + fileName;
+
+            saveFile(istream, serverFileName);
+
+            return FILE_PATH+fileName;
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private void saveFile(InputStream uploadedInputStream,
