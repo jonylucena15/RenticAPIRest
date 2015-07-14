@@ -72,13 +72,9 @@ public class UserService {
         if (user.telefon!=null)u.setTelefon(user.telefon);
         if (user.fotoPerfil!=null)u.setFotoPerfil(user.fotoPerfil);
         if (user.nomComplet!=null) u.setNomComplet(user.nomComplet);
-
         em.merge(u);
 
-
         return u;
-
-
     }
 
 
@@ -96,7 +92,6 @@ public class UserService {
         }
 
         return null;
-
     }
 
     public User getUser(Long id) {
@@ -105,7 +100,7 @@ public class UserService {
 
     public User updateImage(MultipartFormDataInput input, Long userId) {
 
-       Map<String, List<InputPart>> formParts = input.getFormDataMap();
+        Map<String, List<InputPart>> formParts = input.getFormDataMap();
 
         List<InputPart> image = formParts.get("file");
 
