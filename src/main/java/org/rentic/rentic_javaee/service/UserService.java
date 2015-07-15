@@ -2,8 +2,11 @@ package org.rentic.rentic_javaee.service;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.rentic.rentic_javaee.model.Lloguer;
+import org.rentic.rentic_javaee.model.Objecte;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.rest.UserRESTService;
+import org.rentic.rentic_javaee.util.DateAdapter;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -11,8 +14,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -30,7 +32,7 @@ public class UserService {
 
     public User matchPassword(String email, String password) {
         Query q = em.createQuery("select u from User u where u.email=:email");
-        q.setParameter("email",email);
+        q.setParameter("email", email);
         try {
             User u = (User) q.getSingleResult();
             return u.getPassword().equals(password) ? u : null;
@@ -98,6 +100,48 @@ public class UserService {
         return em.find(User.class, id);
     }
 
+
+    public Collection<Lloguer> getLloguersRebuts(Long id, boolean finalitzats) {
+
+        Query q = null;
+        List<Objecte> obj =  new ArrayList<Objecte>();
+        try {
+
+            q = em.createQuery("select obj from  Objecte obj where obj.userId=:idUsers");
+            q.setParameter("idUsers", id);
+            obj = q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        DateAdapter d = new DateAdapter();
+        Date dataSistema = new Date();
+        String dSistema= null;
+        try {
+            dSistema = d.marshal(dataSistema);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<Lloguer> resultat = new ArrayList<Lloguer>();
+        for (int i = 0; i < obj.size(); i++) {
+            List<Lloguer> l = (List<Lloguer>) obj.get(i).getLloguers();
+
+            for (int j = 0; j < l.size(); j++) {
+                try {
+
+                    if (!finalitzats && (l.get(j).getDataFi().equals(dSistema) || !d.compararDate(l.get(j).getDataFi(), dSistema).equals(l.get(j).getDataFi())))
+                        resultat.add(l.get(j));
+                    else if (finalitzats && (!l.get(j).getDataFi().equals(dSistema) && d.compararDate(l.get(j).getDataFi(), dSistema).equals(l.get(j).getDataFi())))
+                        resultat.add(l.get(j));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return resultat;
+    }
+
     public User updateImage(MultipartFormDataInput input, Long userId) {
 
         Map<String, List<InputPart>> formParts = input.getFormDataMap();
@@ -112,5 +156,34 @@ public class UserService {
 
         return u;
 
+    }
+
+    public Collection<Lloguer> getLloguersRealitzats(Long id, boolean finalitzats) {
+        User u= em.find(User.class, id);
+        DateAdapter d = new DateAdapter();
+        Date dataSistema = new Date();
+        String dSistema= null;
+        try {
+            dSistema = d.marshal(dataSistema);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<Lloguer> resultat = new ArrayList<Lloguer>();
+
+        List<Lloguer> aux = (List<Lloguer>) u.getLloguers();
+
+        for (int j = 0; j < aux.size(); j++) {
+            try {
+                if (!finalitzats && (aux.get(j).getDataFi().equals(dSistema) || !d.compararDate(aux.get(j).getDataFi(), dSistema).equals(aux.get(j).getDataFi())))
+                    resultat.add(aux.get(j));
+                else if (finalitzats && (!aux.get(j).getDataFi().equals(dSistema) && d.compararDate(aux.get(j).getDataFi(), dSistema).equals(aux.get(j).getDataFi())))
+                    resultat.add(aux.get(j));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultat;
     }
 }

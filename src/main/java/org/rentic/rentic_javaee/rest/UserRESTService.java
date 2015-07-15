@@ -1,6 +1,7 @@
 package org.rentic.rentic_javaee.rest;
 
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.rentic.rentic_javaee.model.Lloguer;
 import org.rentic.rentic_javaee.model.User;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
@@ -15,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -385,6 +387,243 @@ public class UserRESTService {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
             return Error.build("500", "Error el email ja esta registrat!");
+        }
+    }
+
+    @GET
+    @Path("{id}"+"/lloguersRealitzatsFin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguersRealitzatsFin(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
+
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> u = userService.getLloguersRealitzats(id, true);
+
+        // Check if the user id exists
+        if (u == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix o no tens cap lloguer realitzat!");
+        }
+
+
+        try {
+            return Answer("200", toJSON.Object(u));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
+
+
+    @GET
+    @Path("{id}"+"/lloguersRealitzats")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguersRealitzats(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
+
+
+            HttpSession session = req.getSession();
+
+            if (session == null) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error sessions no soportades!");
+            }
+
+            if (session.getAttribute("rentic_auth_id") == null) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error no estas loguejat!");
+            }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> u = userService.getLloguersRealitzats(id, false);
+
+        // Check if the user id exists
+        if (u == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix o no tens cap lloguer realitzat!");
+        }
+
+
+        try {
+            return Answer("200", toJSON.Object(u));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
+
+    @GET
+    @Path("{id}"+"/lloguersRebuts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguersRebuts(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
+
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> u = userService.getLloguersRebuts(id,false);
+
+        // Check if the user id exists
+        if (u == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix o no tens cap lloguer realitzat!");
+        }
+
+
+        try {
+            return Answer("200", toJSON.Object(u));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
+
+    @GET
+    @Path("{id}"+"/lloguersRebutsFin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguersRebutsFinalitzats(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws IOException {
+
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> u = userService.getLloguersRebuts(id, true);
+
+        // Check if the user id exists
+        if (u == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix o no tens cap lloguer realitzat!");
+        }
+
+
+        try {
+            return Answer("200", toJSON.Object(u));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
         }
     }
 }
