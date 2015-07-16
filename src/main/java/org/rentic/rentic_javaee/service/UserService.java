@@ -204,7 +204,7 @@ public class UserService {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
-        String Mensage = "Estimad@"+nu.getNomComplet()+"\n" +
+        String Mensage = "Estimad@ "+nu.getNomComplet()+"\n" +
                 "\nBienvenid@ a Rentic,\n"+
                 "Un lugar donde podrá disfrutar de las mejores ofertas en el alquiler de productos de todo tipo.\n" +
                 "\nA partir de ahora, además, disfrutará de todas las ventajas y promociones que iremos ofreciendo.\n\n" +
