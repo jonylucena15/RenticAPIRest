@@ -207,22 +207,14 @@ public class UserService {
         String Mensage = "Estimad@"+nu.getNomComplet()+"\n" +
                 "\nBienvenid@ a Rentic,\n"+
                 "Un lugar donde podrá disfrutar de las mejores ofertas en el alquiler de productos de todo tipo.\n" +
-                "\n" +
-                "A partir de ahora, además, disfrutará de todas las ventajas y promociones que iremos ofreciendo.\n\n" +
-
-                "Información de su Cuenta en Rentic:\n" +
-                "\n" +
+                "\nA partir de ahora, además, disfrutará de todas las ventajas y promociones que iremos ofreciendo.\n\n" +
+                "Información de su Cuenta en Rentic:\n\n" +
                 "Nombre: \t"+nu.getNomComplet()+"\n" +
                 "Email: \t\t"+nu.getEmail()+"\n" +
                 "Password: \t"+nu.getPassword()+"\n" +
-                "\n" +
-                "\n" +
-                "Si tiene cualquier duda o comentario, contacte con nosotros en el email: rentic.authinfo@gmail.com \n" +
-                "\n" +
+                "\n\nSi tiene cualquier duda o comentario, contacte con nosotros en el email: rentic.authinfo@gmail.com \n\n" +
                 "Un saludo,\n" +
                 "El equipo de Rentic.";
-
-
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
