@@ -376,7 +376,7 @@ public class UserRESTService {
             try {
                 session.setAttribute("rentic_auth_id", nu.getId());
                 session.setMaxInactiveInterval(-1);
-
+                userService.SendMail(nu);
                 return Answer("200", toJSON.Object(nu));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
