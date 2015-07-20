@@ -106,14 +106,25 @@ public class ObjecteService {
         return em.find(Objecte.class, id);
     }
 
-    public  Boolean deleteObjecte(Long id, Long userID) throws Exception {
-        Objecte o= em.find(Objecte.class, id);
+    public  Boolean deleteObjecte(Long idObjecte, Long userID) throws Exception {
+        Objecte o= em.find(Objecte.class, idObjecte);
         if(o!=null) {
             if (o.getUser().getId().intValue() == userID.intValue()) {
-                em.remove(o);
+                em.detach(o);
+                o.setDispRangs(null);
+                o.setImatges(null);
+                o.setLloguers(null);
+                Query q = em.createQuery("DELETE FROM Lloguer llog WHERE llog.objectId=:idObjecte");
+                q.setParameter("idObjecte", idObjecte).executeUpdate();
+                em.merge(o);
+                em.flush();
+                q = em.createQuery("DELETE FROM Objecte obj WHERE obj.id=:idObjecte");
+                q.setParameter("idObjecte", idObjecte).executeUpdate();
+
                 return true;
             }
         }
+
         return false;
     }
     public List<Objecte> getObjectesUsuari(Long idUser) {
@@ -219,7 +230,10 @@ public class ObjecteService {
 
         if(lloguer!=null) {
             if(userId.intValue()==lloguer.getUser().getId().intValue() || userId.intValue()==lloguer.getObjecte().getUser().getId().intValue()){
-                em.remove(lloguer);
+
+                Query q = em.createQuery("DELETE FROM Lloguer llog WHERE llog.id=:idLloguer");
+                q.setParameter("idLloguer", idLloguer).executeUpdate();
+
                 return true;
             }
         }

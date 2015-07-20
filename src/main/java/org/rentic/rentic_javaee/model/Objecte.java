@@ -171,6 +171,7 @@ public class Objecte implements Serializable{
 
     public void addLloguer(Lloguer lloguer) {  lloguers.add(lloguer); }
 
+    public void deleteLloguer(Lloguer lloguer) { lloguers.remove(lloguer); }
 
     public Collection<Conversa> getConverses() {
         converses.size();
@@ -182,4 +183,6 @@ public class Objecte implements Serializable{
     }
 
     public void addConversa(Conversa conversa) {  converses.add(conversa); }
+
+
 }

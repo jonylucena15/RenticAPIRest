@@ -101,6 +101,8 @@ public class User implements Serializable {
 
     public void addObjecte(Objecte objecte) {  objectes.add(objecte); }
 
+    public void deleteLloguer(Lloguer lloguer) { lloguers.remove(lloguer); }
+
     public Collection<Lloguer> getLloguers() {
         lloguers.size();
         return lloguers;
