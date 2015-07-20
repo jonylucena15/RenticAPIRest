@@ -248,4 +248,10 @@ public class UserService {
             throw new RuntimeException(e);
         }
     }
+
+    public Collection<Lloguer> getLloguers(Long userId) throws Exception {
+
+        User user= em.find(User.class, userId);
+        return user.getLloguers();
+    }
 }

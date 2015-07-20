@@ -65,6 +65,8 @@ public class Lloguer implements Serializable {
         this.user = user;
     }
 
+    public Long getUserId() { return userId;  }
+
     public Objecte getObjecte() { return objecte; }
 
     public void setObjecte(Objecte objecte) { this.objecte = objecte; }

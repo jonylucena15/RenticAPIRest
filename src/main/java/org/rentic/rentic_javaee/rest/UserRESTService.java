@@ -548,7 +548,7 @@ public class UserRESTService {
             return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
         }
 
-        Collection<Lloguer> u = userService.getLloguersRebuts(id,false);
+        Collection<Lloguer> u = userService.getLloguersRebuts(id, false);
 
         // Check if the user id exists
         if (u == null) {
@@ -623,6 +623,57 @@ public class UserRESTService {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
             Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
+            return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
+
+    @GET
+    @Path("{id}/lloguers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguers(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws Exception {
+
+        // Access to the HTTP session
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error sessions no soportades!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> llog = userService.getLloguers(id);
+
+        // Check if the user id exists
+        if (llog == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix!");
+        }
+
+        try {
+            return Answer("200", toJSON.Object(llog));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
             return Error.build("500","Error transformant l'usuari a JSON!");
         }
     }

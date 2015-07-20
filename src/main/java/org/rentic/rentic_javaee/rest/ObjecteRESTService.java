@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -265,7 +266,7 @@ public class ObjecteRESTService {
     @POST
     @Path("{id}"+"/lloguer")
     @Produces(MediaType.APPLICATION_JSON)
-    public String addlloguer(
+    public String addLloguer(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
             @PathParam("id") Long idObjecte ,
@@ -289,7 +290,7 @@ public class ObjecteRESTService {
         Lloguer llog = new Lloguer();
 
         try {
-            llog = objecteService.addLloguer(ll.dataInici,ll.dataFi,idObjecte,ll.idLlogater,userId);
+            llog = objecteService.addLloguer(ll.dataInici, ll.dataFi, idObjecte, ll.idLlogater, userId);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.flushBuffer();
@@ -310,5 +311,102 @@ public class ObjecteRESTService {
             return Error.build("500", "Error no ets el propietari de l'objecte o l'objecte no existeix");
         }
     }
+    @DELETE
+    @Path("{id}"+"/lloguer/{idLloguer}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String eliminarLloguer(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long idObjecte,
+            @PathParam("idLloguer") Long idLloguer) throws IOException, ServletException {
 
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        Boolean eliminat=false;
+        try {
+           eliminat  = objecteService.eliminarLloguer(idObjecte, idLloguer, userId);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error creant el lloguer de l'objecte");
+        }
+
+        if (eliminat) {
+            try {
+                return Answer("200", "{}");
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error transformant l'objecte a JSON");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no s'ha pogut eliminar el lloguer");
+        }
+    }
+
+    @GET
+    @Path("{id}/lloguers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLloguers(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long id) throws Exception {
+
+        // Access to the HTTP session
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error sessions no soportades!");
+        }
+
+        Long userid = (Long) session.getAttribute("rentic_auth_id");
+
+        // Check if the user is authenticated
+        if (userid == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no estas loguejat!");
+        }
+
+        // Check if the user is trying to access other user's data
+        if (id.intValue() != userid.intValue() ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error no pots accedir a les dades d'un altre usuari!");
+        }
+
+        Collection<Lloguer> llog = objecteService.getLloguers(id);
+
+        // Check if the user id exists
+        if (llog == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","L'usuari amb ID " + id + " no existeix!");
+        }
+
+        try {
+            return Answer("200", toJSON.Object(llog));
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
 }

@@ -212,4 +212,23 @@ public class ObjecteService {
         }else
             return null;
     }
+
+    public Boolean eliminarLloguer(Long idObjecte, Long idLloguer, Long userId) {
+
+        Lloguer lloguer = em.find(Lloguer.class, idLloguer);
+
+        if(lloguer!=null) {
+            if(userId.intValue()==lloguer.getUser().getId().intValue() || userId.intValue()==lloguer.getObjecte().getUser().getId().intValue()){
+                em.remove(lloguer);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Collection<Lloguer> getLloguers(Long idObjecte) throws Exception {
+
+        Objecte objecte= em.find(Objecte.class, idObjecte);
+        return objecte.getLloguers();
+    }
 }
