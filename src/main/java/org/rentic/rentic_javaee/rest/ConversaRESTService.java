@@ -8,6 +8,7 @@ import org.rentic.rentic_javaee.util.ToJSON;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -136,6 +137,54 @@ public class ConversaRESTService {
             response.flushBuffer();
             Logger.getLogger(UserRESTService.class.getName()).log(Level.SEVERE, "Error transformant l'usuari a JSON!", ex);
             return Error.build("500","Error transformant l'usuari a JSON!");
+        }
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String eliminarLloguer(
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response,
+            @PathParam("id") Long idChat
+           ) throws IOException, ServletException {
+
+        HttpSession session = req.getSession();
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error sessions no soportades!");
+        }
+
+        if (session.getAttribute("rentic_auth_id") == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no estas loguejat!");
+        }
+
+        Long userId = (Long) session.getAttribute("rentic_auth_id");
+        Boolean eliminat=false;
+        try {
+            eliminat  = conversaService.eliminarConversa(idChat, userId);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error creant el lloguer de l'objecte");
+        }
+
+        if (eliminat) {
+            try {
+                return Answer("200", "{}");
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.flushBuffer();
+                return Error.build("500", "Error transformant l'objecte a JSON");
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
+            return Error.build("500", "Error no s'ha pogut eliminar la conversa");
         }
     }
 }

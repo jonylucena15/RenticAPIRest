@@ -129,4 +129,26 @@ public class ConversaService {
             em.persist(m);
         }
     }
+
+    public Boolean eliminarConversa(Long idChat, Long userId) {
+
+        Conversa chat = em.find(Conversa.class, idChat);
+
+        if(chat!=null) {
+          List<User> u= (List<User>) chat.getUsers();
+            if(userId.intValue()==u.get(0).getId().intValue() || userId.intValue()==u.get(1).getId().intValue()){
+                em.detach(chat);
+                chat.setMissatges(null);
+                Query q = em.createQuery("DELETE FROM Missatge mis WHERE mis.conversaId=:idChat");
+                q.setParameter("idChat", idChat).executeUpdate();
+                em.merge(chat);
+
+                q = em.createQuery("DELETE FROM Conversa chat WHERE chat.id=:idChat");
+                q.setParameter("idChat", idChat).executeUpdate();
+
+                return true;
+            }
+        }
+        return false;
+    }
 }
