@@ -32,7 +32,7 @@ public class ImageService {
 
                 InputStream istream = inputPart.getBody(InputStream.class, null);
 
-                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR/objects/") + fileName;
+                String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
 
                 saveFile(istream, serverFileName);
                 imatges.add(FILE_PATH+fileName);
@@ -53,7 +53,7 @@ public class ImageService {
 
             InputStream istream = inPart.get(0).getBody(InputStream.class, null);
 
-            String serverFileName = System.getenv("OPENSHIFT_DATA_DIR/users/") + fileName;
+            String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
 
             saveFile(istream, serverFileName);
 
