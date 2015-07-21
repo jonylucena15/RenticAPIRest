@@ -143,7 +143,7 @@ public class ConversaRESTService {
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String eliminarLloguer(
+    public String eliminarConversa(
             @Context HttpServletRequest req,
             @Context HttpServletResponse response,
             @PathParam("id") Long idChat
