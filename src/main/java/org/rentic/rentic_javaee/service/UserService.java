@@ -11,9 +11,6 @@ import org.rentic.rentic_javaee.util.DateAdapter;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -192,62 +189,6 @@ public class UserService {
         return resultat;
     }
 
-    public static String Username = "rentic.authinfo";
-    public static String PassWord = "Rentic123zxc";
-
-
-    String Subject = "Bienvenido a Rentic";
-
-    public void SendMail( User nu) {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        String Mensage = "Estimad@ "+nu.getNomComplet()+"\n" +
-                "\nBienvenid@ a Rentic,\n"+
-                "Un lugar donde podrá disfrutar de las mejores ofertas en el alquiler de productos de todo tipo.\n" +
-                "\nA partir de ahora, además, disfrutará de todas las ventajas y promociones que iremos ofreciendo.\n\n" +
-                "Información de su Cuenta en Rentic:\n\n" +
-                "Nombre: \t"+nu.getNomComplet()+"\n" +
-                "Email: \t\t"+nu.getEmail()+"\n" +
-                "Password: \t"+nu.getPassword()+"\n" +
-                "\n\nSi tiene cualquier duda o comentario, contacte con nosotros en el email: rentic.authinfo@gmail.com \n\n" +
-                "Un saludo,\n" +
-                "El equipo de Rentic.";
-
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Username, PassWord);
-                    }
-                });
-
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(Username));
-            message.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(nu.getEmail()));
-            message.setSubject(Subject);
-            message.setText(Mensage);
-
-            Transport.send(message);
-
-            message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(Username));
-            message.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("rentic.authinfo@gmail.com"));
-            message.setSubject("Nou client");
-            Mensage = "Tenim un nou client!\n\n"+"Informació del client:\n"+"Nombre: \t"+nu.getNomComplet()+"\nEmail:"+" \t\t"+nu.getEmail()+"\n\n";
-            message.setText(Mensage);
-
-            Transport.send(message);
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public Collection<Lloguer> getLloguers(Long userId) throws Exception {
 

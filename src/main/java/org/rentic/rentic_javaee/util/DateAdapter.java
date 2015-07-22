@@ -28,10 +28,25 @@ public class DateAdapter extends XmlAdapter<String, Date> {
         java.util.Date dataDate2 = d.unmarshal(dataActual);
 
         if ( dataDate1.before(dataDate2) )
-            resultat=data1;
+        resultat=data1;
         else
-            resultat=dataActual;
+        resultat=dataActual;
 
         return resultat;
+    }
+
+    public Double diferenciaDies(String data1, String data2)throws Exception{
+
+        DateAdapter d = new DateAdapter();
+        java.util.Date dataDate1 = d.unmarshal(data1);
+        java.util.Date dataDate2 = d.unmarshal(data2);
+
+
+        return Double.valueOf((dataDate2.getTime() - dataDate1.getTime())/ (1000 * 60 * 60 * 24));
+
+
+
+
+
     }
 }

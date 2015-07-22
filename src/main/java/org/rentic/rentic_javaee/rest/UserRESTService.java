@@ -3,10 +3,10 @@ package org.rentic.rentic_javaee.rest;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.Lloguer;
 import org.rentic.rentic_javaee.model.User;
+import org.rentic.rentic_javaee.service.MailService;
 import org.rentic.rentic_javaee.service.UserService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +27,11 @@ import java.util.logging.Logger;
 @RequestScoped
 public class UserRESTService {
 
-    @EJB
+    @Inject
     UserService userService;
+
+    @Inject
+    MailService mailService;
 
     @Inject
     ToJSON toJSON;
@@ -281,6 +284,7 @@ public class UserRESTService {
 
         if (u != null) {
             try {
+                mailService.SendMailUser(u,6,5);
                 return Answer("200", toJSON.Object(u));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -376,7 +380,7 @@ public class UserRESTService {
             try {
                 session.setAttribute("rentic_auth_id", nu.getId());
                 session.setMaxInactiveInterval(-1);
-                userService.SendMail(nu);
+                mailService.SendMailUser(nu,5,0);
                 return Answer("200", toJSON.Object(nu));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

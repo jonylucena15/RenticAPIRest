@@ -39,7 +39,7 @@ public class InitDB {
                 User u = new User();
                 u.setPassword("admin");
                 u.setNomComplet("Usuari Administrador");
-                u.setEmail("admin@admin");
+                u.setEmail("shoni__7@hotmail.com");
                 em.persist(u);
                 em.flush();
             } else {
@@ -51,7 +51,7 @@ public class InitDB {
                 User u = new User();
                 u.setPassword("client");
                 u.setNomComplet("Client prova");
-                u.setEmail("client@client");
+                u.setEmail("jonylucena15@gmail.com");
                 em.persist(u);
                 em.flush();
             } else {

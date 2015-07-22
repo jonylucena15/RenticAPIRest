@@ -3,10 +3,10 @@ package org.rentic.rentic_javaee.rest;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.rentic.rentic_javaee.model.Lloguer;
 import org.rentic.rentic_javaee.model.Objecte;
+import org.rentic.rentic_javaee.service.MailService;
 import org.rentic.rentic_javaee.service.ObjecteService;
 import org.rentic.rentic_javaee.util.ToJSON;
 
-import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -29,9 +29,11 @@ import java.util.List;
 @RequestScoped
 public class ObjecteRESTService {
 
-    @EJB
+    @Inject
     ObjecteService objecteService;
 
+    @Inject
+    MailService mailService;
 
     @Inject
     ToJSON toJSON;
@@ -299,6 +301,7 @@ public class ObjecteRESTService {
 
         if (llog != null) {
             try {
+                mailService.SendMailLloguer(llog, 5, 0);
                 return Answer("200", toJSON.Object(llog));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
