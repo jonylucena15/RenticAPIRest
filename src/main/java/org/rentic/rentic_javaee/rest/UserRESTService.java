@@ -89,6 +89,7 @@ public class UserRESTService {
                     session.setAttribute("rentic_auth_id", u.getId());
                     session.setMaxInactiveInterval(-1);
 
+
                     return Answer("200", toJSON.Object(u));
 
                 } catch (Exception ex) {
@@ -378,6 +379,7 @@ public class UserRESTService {
 
         if (nu!=null) {
             try {
+
                 session.setAttribute("rentic_auth_id", nu.getId());
                 session.setMaxInactiveInterval(-1);
                 mailService.SendMailUser(nu,5,0);
