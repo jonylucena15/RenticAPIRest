@@ -29,7 +29,7 @@ public class MailService {
 
 
 
-    public void SendMailUser( User nu, int n,int nRentic) {
+    public void SendMailUser( User nu, int n,int nRentic, String comentari) {
         List<String> Subject = Arrays.asList("Nou client","avis1","avis2", "avis3","avist4","Bienvenido a Rentic", "Contraseña canviada correctament", "sup4");
 
         Properties props = new Properties();
@@ -52,7 +52,7 @@ public class MailService {
             message.addRecipient(Message.RecipientType.TO,
                     new InternetAddress(nu.getEmail()));
             message.setSubject(Subject.get(n));
-            message.setText(getBodyTextUser(nu, n));
+            message.setText(getBodyTextUser(nu, n,comentari));
 
             Transport.send(message);
 
@@ -63,7 +63,7 @@ public class MailService {
                         new InternetAddress("rentic.authinfo@gmail.com"));
                 message.setSubject(Subject.get(nRentic));
 
-                message.setText(getBodyTextUser(nu, nRentic));
+                message.setText(getBodyTextUser(nu, nRentic,comentari));
 
                 Transport.send(message);
             }
@@ -73,8 +73,8 @@ public class MailService {
         }
     }
 
-    public void SendMailLloguer( Lloguer llog, int n,int nRentic) {
-        List<String> Subject = Arrays.asList("avis0","avis1","avis2", "avis3","avist4","Peticion de alquiler aceptada", "Contraseña canviada correctament", "sup4");
+    public void SendMailLloguer( Lloguer llog, int n,int nRentic, String comentari) {
+        List<String> Subject = Arrays.asList("Lloguer eliminat","avis1","avis2", "avis3","avist4","Peticion de alquiler aceptada", "Peticion de alquiler rechazada", "sup4");
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -96,7 +96,7 @@ public class MailService {
             message.addRecipient(Message.RecipientType.TO,
                     new InternetAddress(llog.getUser().getEmail()));
             message.setSubject(Subject.get(n));
-            message.setText(getBodyTextLloguer(llog, n));
+            message.setText(getBodyTextLloguer(llog, n,comentari));
 
             Transport.send(message);
 
@@ -107,7 +107,7 @@ public class MailService {
                         new InternetAddress("rentic.authinfo@gmail.com"));
                 message.setSubject(Subject.get(nRentic));
 
-                message.setText(getBodyTextLloguer(llog, nRentic));
+                message.setText(getBodyTextLloguer(llog, nRentic,comentari));
 
                 Transport.send(message);
             }
@@ -119,7 +119,7 @@ public class MailService {
         }
     }
 
-    private String getBodyTextUser(User nu, int n) {
+    private String getBodyTextUser(User nu, int n, String comentari) {
 
 
         List<String> text = new ArrayList<>();
@@ -170,11 +170,11 @@ public class MailService {
         return text.get(n);
     }
 
-    private String getBodyTextLloguer(Lloguer llog, int n) throws Exception {
+    private String getBodyTextLloguer(Lloguer llog, int n, String comentari) throws Exception {
         DateAdapter d = new DateAdapter();
         List<String> text= new ArrayList<>();
 
-        String bodyText0 = "";
+        String bodyText0 = "El lloguer" + llog.getId() + " ha sigut eliminat per el propietari.\n" + "Comentari del propietari:\n" + " \t\t" + comentari+ "\n\n";
         text.add(bodyText0);
 
         String bodyText1 = "";
@@ -211,7 +211,24 @@ public class MailService {
                 "El equipo de Rentic.";
         text.add(bodyText5);
 
-        String bodyText6 = "";
+        String bodyText6 = "Estimad@ " + llog.getUser().getNomComplet() + "\n" +
+                "\nLo sentimos, peró el propietario del producto "+ llog.getObjecte().getNom() + " ha rechazado el alquiler finalmente.\n\n"+
+                "Comentario del propietario:\n\n" +comentari + "\n" +
+
+                "Detalles del alquiler rechazado:\n"+
+                "\t- Nombre del producto: \t\t" + llog.getObjecte().getNom() + "\n" +
+                "\t- Nombre del propietario: \t" + llog.getUser().getNomComplet() + "\n" +
+                "\t- Telefono contacto: \t\t" + llog.getUser().getTelefon() + "\n\n" +
+                "\t- Fecha inicio: \t" + llog.getDataInici() + "\n" +
+                "\t- Fecha final: \t\t" + llog.getDataFi() + "\n" +
+                "\t- Precio por dia: \t" + llog.getObjecte().getPreu() + "\u20ac \n" +
+                "\t- Precio total: \t" + (Double) llog.getObjecte().getPreu()*d.diferenciaDies(llog.getDataInici(), llog.getDataFi()) + "\u20ac \n\n" +
+
+                "\n Si tiene cualquier duda sobre el rechazo del alquiler, contacte con el propietario.\n\n" +
+
+                "\n\nSi tiene cualquier duda o comentario, contacte con nosotros en el email: rentic.authinfo@gmail.com \n\n" +
+                "Un saludo,\n" +
+                "El equipo de Rentic.";
         text.add(bodyText6);
 
         String bodyText7 = "";

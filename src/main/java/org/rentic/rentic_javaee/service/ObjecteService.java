@@ -224,20 +224,20 @@ public class ObjecteService {
             return null;
     }
 
-    public Boolean eliminarLloguer(Long idObjecte, Long idLloguer, Long userId) {
+    public Lloguer eliminarLloguer(Long idObjecte, Long idLloguer, Long userId) {
 
         Lloguer lloguer = em.find(Lloguer.class, idLloguer);
 
         if(lloguer!=null) {
-            if(userId.intValue()==lloguer.getUser().getId().intValue() || userId.intValue()==lloguer.getObjecte().getUser().getId().intValue()){
+            if(userId.intValue()==lloguer.getObjecte().getUser().getId().intValue()){
 
                 Query q = em.createQuery("DELETE FROM Lloguer llog WHERE llog.id=:idLloguer");
                 q.setParameter("idLloguer", idLloguer).executeUpdate();
 
-                return true;
+                return lloguer;
             }
         }
-        return false;
+        return null;
     }
 
     public Collection<Lloguer> getLloguers(Long idObjecte) throws Exception {

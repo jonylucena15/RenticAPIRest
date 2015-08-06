@@ -301,7 +301,7 @@ public class ObjecteRESTService {
 
         if (llog != null) {
             try {
-                mailService.SendMailLloguer(llog, 5, 0);
+                mailService.SendMailLloguer(llog, 5, 6,"");
                 return Answer("200", toJSON.Object(llog));
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -338,7 +338,7 @@ public class ObjecteRESTService {
         }
 
         Long userId = (Long) session.getAttribute("rentic_auth_id");
-        Boolean eliminat=false;
+        Lloguer eliminat=null;
         try {
            eliminat  = objecteService.eliminarLloguer(idObjecte, idLloguer, userId);
         } catch (Exception e) {
@@ -347,8 +347,9 @@ public class ObjecteRESTService {
             return Error.build("500", "Error creant el lloguer de l'objecte");
         }
 
-        if (eliminat) {
+        if (eliminat!=null) {
             try {
+                mailService.SendMailLloguer(eliminat, 6, 6,"");
                 return Answer("200", "{}");
             } catch (Exception ex) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
