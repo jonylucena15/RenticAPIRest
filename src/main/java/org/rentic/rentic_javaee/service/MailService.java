@@ -22,12 +22,8 @@ import java.util.Properties;
 @LocalBean
 public class MailService {
 
-
     private static String Username = "rentic.authinfo";
     private static String PassWord = "Rentic123zxc";
-
-
-
 
     public void SendMailUser( User nu, int n,int nRentic, String comentari) {
         List<String> Subject = Arrays.asList("Nou client","avis1","avis2", "avis3","avist4","Bienvenido a Rentic", "Contraseña canviada correctament", "sup4");

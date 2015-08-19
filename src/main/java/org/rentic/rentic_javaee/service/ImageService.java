@@ -35,6 +35,7 @@ public class ImageService {
                 String serverFileName = System.getenv("OPENSHIFT_DATA_DIR") + fileName;
 
                 saveFile(istream, serverFileName);
+
                 imatges.add(FILE_PATH+fileName);
             } catch (Exception e) {
                 return null;

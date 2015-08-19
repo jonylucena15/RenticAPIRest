@@ -33,8 +33,6 @@ public class ObjecteService {
     private EntityManager em;
 
 
-
-
     public Objecte addObjecte(MultipartFormDataInput input, Long userId) throws Exception {
 
         Map<String, List<InputPart>> formParts = input.getFormDataMap();
@@ -49,8 +47,7 @@ public class ObjecteService {
             if (imatge!=null) {
                 inPart.add(imatge.get(0));
                 i++;
-            } else
-                fi=true;
+            } else {fi=true;}
         }
 
         User user = em.find(User.class, userId);
@@ -163,7 +160,6 @@ public class ObjecteService {
                     List<Disponibilitat> disp = obj.get(i).getDispRangs();
                     int nx = 0;
                     while (!compleix && nx < disp.size()) {
-
                         compleix =disp.get(nx).getDataFi().equals(dSistema) || !(d.compararDate(disp.get(nx).getDataFi(), dSistema).equals(disp.get(nx).getDataFi()));
                         nx++;
                     }
@@ -185,15 +181,10 @@ public class ObjecteService {
                 }
             }
 
-            if(!orderBy.isEmpty() && orderBy.get(0).equals("distancia")){
-                Collections.sort(obj, new DistanceComparator(latitud, longitud));
-            }
-            if(limit!=0) {
-                for (int t=0; t<limit&&t<obj.size();t++){
-                    o.add(obj.get(t));
-                }
-            }else
-                o= obj;
+            if(!orderBy.isEmpty() && orderBy.get(0).equals("distancia")) Collections.sort(obj, new DistanceComparator(latitud, longitud));
+
+            if(limit!=0) { for (int t=0; t<limit&&t<obj.size();t++){ o.add(obj.get(t)); }}
+            else  o= obj;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,7 +221,6 @@ public class ObjecteService {
 
         if(lloguer!=null) {
             if(userId.intValue()==lloguer.getObjecte().getUser().getId().intValue()){
-
                 Query q = em.createQuery("DELETE FROM Lloguer llog WHERE llog.id=:idLloguer");
                 q.setParameter("idLloguer", idLloguer).executeUpdate();
 
@@ -241,7 +231,6 @@ public class ObjecteService {
     }
 
     public Collection<Lloguer> getLloguers(Long idObjecte) throws Exception {
-
         Objecte objecte= em.find(Objecte.class, idObjecte);
         return objecte.getLloguers();
     }

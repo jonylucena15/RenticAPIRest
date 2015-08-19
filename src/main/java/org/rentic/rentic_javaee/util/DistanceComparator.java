@@ -19,7 +19,11 @@ public class DistanceComparator implements Comparator<Objecte>  {
 
     @Override
     public int compare(Objecte obj1, Objecte obj2) {
-        if(distFrom(obj1.getLatitud(), obj1.getLongitud(), latitud, longitud) < distFrom(obj2.getLatitud(), obj2.getLongitud(), latitud, longitud))
+        if(obj1.getLatitud()==null || obj1.getLatitud()==null) return -1;
+        if(obj2.getLatitud()==null || obj2.getLatitud() == null) return 1;
+
+
+        if (distFrom(obj1.getLatitud(), obj1.getLongitud(), latitud, longitud) < distFrom(obj2.getLatitud(), obj2.getLongitud(), latitud, longitud))
             return -1;
         else if (distFrom(obj1.getLatitud(), obj1.getLongitud(), latitud, longitud) > distFrom(obj2.getLatitud(), obj2.getLongitud(),latitud, longitud))
             return 1;
